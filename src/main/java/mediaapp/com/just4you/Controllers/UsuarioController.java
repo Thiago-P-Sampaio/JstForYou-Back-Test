@@ -15,5 +15,14 @@ import java.util.List;
 @RequestMapping (value = "/user")
 public class UsuarioController {
 
+    @Autowired
+    UsuarioRepositorio usuarioRepositorio;
+
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<EntidadeUsuario>> buscar(){
+        return ResponseEntity.ok().body(usuarioRepositorio.findAll());
+    }
+
 
 }
