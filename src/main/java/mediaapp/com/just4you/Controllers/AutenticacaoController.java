@@ -7,8 +7,10 @@ import mediaapp.com.just4you.DTOs.RespostaLoginDTO;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import mediaapp.com.just4you.Roles.PermissaoUsuario;
+import mediaapp.com.just4you.Services.AutenticacaoService;
 import mediaapp.com.just4you.Services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,38 +25,16 @@ import java.time.Instant;
 public class AutenticacaoController {
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    UsuarioRepositorio usuarioRepositorio;
-
-    @Autowired
-    TokenService tokenService;
+    AutenticacaoService autenticacaoService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuntenticacaoDTO dados ){
-        var credenciaisUsuario = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
-        var auth = this.authenticationManager.authenticate(credenciaisUsuario);
-
-        var token = tokenService.gerarToken((EntidadeUsuario) auth.getPrincipal());
-
-        return  ResponseEntity.ok(new RespostaLoginDTO(token));
+    return ResponseEntity.ok(autenticacaoService.login(dados));
     }
 
     @PostMapping("/register")
-    public ResponseEntity cadastrar(@RequestBody @Valid CadastrarDTO dados){
-    if(this.usuarioRepositorio.findByEmail(dados.email()) != null) return  ResponseEntity.badRequest().build();
-    String senhaCriptografada = new BCryptPasswordEncoder().encode(dados.senha());
-        EntidadeUsuario usuario = new EntidadeUsuario();
-        usuario.setDataCadastro(Instant.now());
-        usuario.setNome(dados.nome());
-        usuario.setSenha(senhaCriptografada);
-        usuario.setEmail(dados.email());
-        usuario.setDataNascimento(dados.dataNascimento());
-        usuario.setRole(dados.role());
-
-        this.usuarioRepositorio.save(usuario);
-
-        return  ResponseEntity.ok().build();
+    public ResponseEntity cadastrar(@RequestBody @Valid CadastrarDTO dados) {
+        if (autenticacaoService.cadastrar(dados)) return ResponseEntity.status(HttpStatus.CREATED).body("Cadastrado com sucesso");
+        else  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não pode ser cadastrado, tente novamente!");
     }
 }
