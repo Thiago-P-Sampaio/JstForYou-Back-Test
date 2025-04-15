@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,9 @@ public class EntidadeUsuario implements UserDetails {
     private Instant dataCadastro;
 
     private PermissaoUsuario role;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<EntidadePreferencias> preferencias = new ArrayList<>();
 
 
     public EntidadeUsuario() {
