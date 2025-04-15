@@ -20,7 +20,7 @@ public class PreferenciaService {
     @Autowired
     UsuarioRepositorio usuarioRepositorio;
 
-    public PreferenciaDTO addPreferencia( Long id, PreferenciaDTO dto){
+    public PreferenciaDTO addPreferencia( Long id, AddPreferenciaDTO dto){
             Optional<EntidadeUsuario> user =  usuarioRepositorio.findById(id);
             if(user.isPresent()){
                 EntidadePreferencias preferencias = new EntidadePreferencias();
