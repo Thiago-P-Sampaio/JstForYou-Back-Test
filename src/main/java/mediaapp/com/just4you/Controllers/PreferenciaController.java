@@ -17,7 +17,7 @@ public class PreferenciaController {
 
 
     @PostMapping("/add/{id}")
-    public ResponseEntity addPreferencia(@PathVariable Long id, @RequestBody @Valid PreferenciaDTO dto){
+    public ResponseEntity addPreferencia(@PathVariable Long id, @RequestBody @Valid AddPreferenciaDTO dto){
         return ResponseEntity.ok(preferenciaService.addPreferencia(id, dto));
 
     }
