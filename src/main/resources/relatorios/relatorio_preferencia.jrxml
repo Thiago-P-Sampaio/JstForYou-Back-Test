@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="relatorio_usuarios" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+
+    <!-- Definição dos campos -->
+    <field name="usuarioId" class="java.lang.Long"/>
+    <field name="faixaEtaria" class="java.lang.Long"/>
+    <field name="preferencia" class="java.lang.String"/>
+
+    <!-- Título do relatório -->
+    <title>
+        <band height="50">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[Relatório de Usuários]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <!-- Cabeçalho das colunas -->
+    <columnHeader>
+        <band height="20">
+            <staticText>
+                <reportElement x="0" y="0" width="80" height="20"/>
+                <text><![CDATA[Usuário ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="100" y="0" width="150" height="20"/>
+                <text><![CDATA[Faixa Etária]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="300" y="0" width="200" height="20"/>
+                <text><![CDATA[Preferência]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Corpo do relatório -->
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{usuarioId}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="0" width="150" height="20"/>
+                <textFieldExpression><![CDATA[$F{faixaEtaria}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="0" width="200" height="20"/>
+                <textFieldExpression><![CDATA[$F{preferencia}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+</jasperReport>

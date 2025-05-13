@@ -36,6 +36,7 @@ public class ConfiguracoesSeguranca implements WebMvcConfigurer {
                          .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                          .requestMatchers(HttpMethod.GET, "/user/buscar/{id}").hasRole("USER")
                          .requestMatchers(HttpMethod.POST, "/preferencia/add/{id}").hasRole("USER")
+                         .requestMatchers(HttpMethod.GET, "/relatorios").hasRole("USER")
                          .requestMatchers(HttpMethod.GET, "/user/buscar").hasRole("USER"))
 
                  .addFilterBefore(filtroSeguranca, UsernamePasswordAuthenticationFilter.class )

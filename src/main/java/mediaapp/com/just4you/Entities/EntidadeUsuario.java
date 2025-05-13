@@ -147,4 +147,12 @@ public class EntidadeUsuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public List<EntidadePreferencias> getPreferencias() {
+        return preferencias;
+    }
+
+    public void setPreferencias(List<EntidadePreferencias> preferencias) {
+        this.preferencias = preferencias;
+    }
 }
