@@ -36,6 +36,16 @@ public class EntidadeUsuario implements UserDetails {
 
     private PermissaoUsuario role;
 
+    //Relacionamentos
+
+    @OneToMany( mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EntidadePreferencia> preferencias = new ArrayList<>();
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private EntidadeListaUsuario listaUsuario;
+
+    //
+
 
 
     public EntidadeUsuario() {
@@ -101,6 +111,22 @@ public class EntidadeUsuario implements UserDetails {
 
     public void setDataCadastro(Instant dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public List<EntidadePreferencia> getPreferencias() {
+        return preferencias;
+    }
+
+    public void setPreferencias(List<EntidadePreferencia> preferencias) {
+        this.preferencias = preferencias;
+    }
+
+    public EntidadeListaUsuario getListaUsuario() {
+        return listaUsuario;
+    }
+
+    public void setListaUsuario(EntidadeListaUsuario listaUsuario) {
+        this.listaUsuario = listaUsuario;
     }
 
     public PermissaoUsuario getRole() {
