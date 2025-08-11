@@ -1,23 +1,13 @@
-package mediaapp.com.just4you.Controllers;
+package mediaapp.com.just4you.Controllers.Access;
 
 import jakarta.validation.Valid;
-import mediaapp.com.just4you.DTOs.AuntenticacaoDTO;
-import mediaapp.com.just4you.DTOs.CadastrarDTO;
-import mediaapp.com.just4you.DTOs.RespostaLoginDTO;
-import mediaapp.com.just4you.Entities.EntidadeUsuario;
-import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
-import mediaapp.com.just4you.Roles.PermissaoUsuario;
+import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
+import mediaapp.com.just4you.DTOs.Register.CadastrarDTO;
 import mediaapp.com.just4you.Services.AutenticacaoService;
-import mediaapp.com.just4you.Services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Instant;
 
 @RestController
 @RequestMapping("/auth")
