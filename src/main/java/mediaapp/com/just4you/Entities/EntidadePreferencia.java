@@ -12,6 +12,16 @@ public class EntidadePreferencia {
     private Long preferenciaId;
     private String descricao;
 
+
+    //Relacionamentos
+
+
+    @ManyToOne
+    @JoinColumn( name = "usuario_id")
+    private EntidadeUsuario usuario;
+
+    //
+
     public EntidadePreferencia() {
     }
 
@@ -35,5 +45,13 @@ public class EntidadePreferencia {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public EntidadeUsuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(EntidadeUsuario usuario) {
+        this.usuario = usuario;
     }
 }
