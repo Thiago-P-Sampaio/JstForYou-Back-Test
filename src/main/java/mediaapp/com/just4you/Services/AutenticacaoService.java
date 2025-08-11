@@ -1,13 +1,11 @@
 package mediaapp.com.just4you.Services;
 
 import jakarta.validation.Valid;
-import mediaapp.com.just4you.DTOs.AuntenticacaoDTO;
-import mediaapp.com.just4you.DTOs.CadastrarDTO;
-import mediaapp.com.just4you.DTOs.RespostaLoginDTO;
+import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
+import mediaapp.com.just4you.DTOs.Register.CadastrarDTO;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
