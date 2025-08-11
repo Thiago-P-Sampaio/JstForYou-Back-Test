@@ -1,5 +1,6 @@
 package mediaapp.com.just4you.DTOs;
 
+import mediaapp.com.just4you.Entities.EntidadeListaUsuario;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 
 import java.time.Instant;
@@ -10,18 +11,17 @@ public class UsuarioDTO {
     private Long id;
     private String nome;
     private String email;
-    private String senha;
     private LocalDate dataNascimento;
     private Instant dataCadastro;
+    private EntidadeListaUsuario entidadeListaUsuario;
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(Long id, String nome, String email, String senha, LocalDate dataNascimento, Instant dataCadastro) {
+    public UsuarioDTO(Long id, String nome, String email, LocalDate dataNascimento, Instant dataCadastro) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
         this.dataNascimento = dataNascimento;
         this.dataCadastro = dataCadastro;
     }
@@ -30,7 +30,6 @@ public class UsuarioDTO {
         id = entity.getUsuarioId();
         nome = entity.getNome();
         email = entity.getEmail();
-        senha = entity.getSenha();
         dataCadastro = entity.getDataCadastro();
         dataNascimento = entity.getDataNascimento();
     }
@@ -57,14 +56,6 @@ public class UsuarioDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public LocalDate getDataNascimento() {
