@@ -5,6 +5,7 @@ import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
 import mediaapp.com.just4you.DTOs.Register.CadastrarDTO;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
+import mediaapp.com.just4you.Roles.PermissaoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +44,7 @@ public class AutenticacaoService {
         usuario.setSenha(senhaCriptografada);
         usuario.setEmail(dados.email());
         usuario.setDataNascimento(dados.dataNascimento());
-        usuario.setRole(dados.role());
+        usuario.setRole(PermissaoUsuario.USER);   //Alteração!
 
         this.usuarioRepositorio.save(usuario);
 

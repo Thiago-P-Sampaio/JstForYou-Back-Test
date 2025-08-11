@@ -1,5 +1,6 @@
 package mediaapp.com.just4you.Services;
 
+import jakarta.transaction.Transactional;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,12 @@ public class UsuarioService {
     @Autowired
     UsuarioRepositorio usuarioRepositorio;
 
-
+    @Transactional
     public List<EntidadeUsuario> buscarUsuarios(){
         return usuarioRepositorio.findAll();
     }
 
+    @Transactional
     public EntidadeUsuario buscarUsuario(Long id){
     return usuarioRepositorio.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
