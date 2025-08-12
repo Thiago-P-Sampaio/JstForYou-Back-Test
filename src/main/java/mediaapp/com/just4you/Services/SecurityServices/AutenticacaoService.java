@@ -1,4 +1,4 @@
-package mediaapp.com.just4you.Services;
+package mediaapp.com.just4you.Services.SecurityServices;
 
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;

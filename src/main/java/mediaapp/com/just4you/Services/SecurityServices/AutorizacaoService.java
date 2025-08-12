@@ -1,4 +1,4 @@
-package mediaapp.com.just4you.Services;
+package mediaapp.com.just4you.Services.SecurityServices;
 
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
