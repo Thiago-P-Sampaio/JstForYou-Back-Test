@@ -2,7 +2,7 @@ package mediaapp.com.just4you.Services;
 
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
-import mediaapp.com.just4you.DTOs.Register.CadastrarDTO;
+import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import mediaapp.com.just4you.Roles.PermissaoUsuario;

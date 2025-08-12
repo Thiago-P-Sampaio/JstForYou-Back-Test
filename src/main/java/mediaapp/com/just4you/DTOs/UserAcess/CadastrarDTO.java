@@ -1,4 +1,4 @@
-package mediaapp.com.just4you.DTOs.Register;
+package mediaapp.com.just4you.DTOs.UserAcess;
 
 import mediaapp.com.just4you.Roles.PermissaoUsuario;
 

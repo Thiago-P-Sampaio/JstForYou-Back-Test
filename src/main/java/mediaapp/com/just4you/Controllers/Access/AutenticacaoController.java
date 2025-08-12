@@ -2,7 +2,7 @@ package mediaapp.com.just4you.Controllers.Access;
 
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
-import mediaapp.com.just4you.DTOs.Register.CadastrarDTO;
+import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
 import mediaapp.com.just4you.Services.AutenticacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
