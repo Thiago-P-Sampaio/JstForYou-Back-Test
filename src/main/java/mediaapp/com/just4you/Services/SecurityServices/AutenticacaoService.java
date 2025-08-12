@@ -3,7 +3,9 @@ package mediaapp.com.just4you.Services.SecurityServices;
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
 import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
+import mediaapp.com.just4you.Entities.EntidadeListaUsuario;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
+import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import mediaapp.com.just4you.Roles.PermissaoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class AutenticacaoService {
     @Autowired
     TokenService tokenService;
 
+    @Autowired
+    ListaUsuarioRepositorio listaUsuarioRepositorio;
+
     public String login(@RequestBody @Valid AuntenticacaoDTO dados ){
         var credenciaisUsuario = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
         var auth = this.authenticationManager.authenticate(credenciaisUsuario);
@@ -47,6 +52,11 @@ public class AutenticacaoService {
         usuario.setRole(PermissaoUsuario.USER);   //Alteração!
 
         this.usuarioRepositorio.save(usuario);
+
+        EntidadeListaUsuario listaUsuario = new EntidadeListaUsuario();
+        listaUsuario.setUsuario(usuario);
+        listaUsuarioRepositorio.save(listaUsuario);
+
 
         return true;
     }
