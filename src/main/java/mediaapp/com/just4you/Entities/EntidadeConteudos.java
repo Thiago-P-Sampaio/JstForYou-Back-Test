@@ -9,6 +9,7 @@ import java.util.Set;
 public class EntidadeConteudos {
 
     @Id
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long conteudoId;
     private String titulo;
 
