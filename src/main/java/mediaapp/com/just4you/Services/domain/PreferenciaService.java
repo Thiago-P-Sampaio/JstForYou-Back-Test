@@ -55,7 +55,7 @@ public class PreferenciaService {
         if (!usuarioRepositorio.existsById(id)) {
             throw new RuntimeException("Usuário com ID " + id + " não encontrado.");
         }
-        List<EntidadePreferencia> preferenciasDoUsuario = preferenciaRepositorio.findByUsuarioId(id);
+        List<EntidadePreferencia> preferenciasDoUsuario = preferenciaRepositorio.findByUsuario_UsuarioId(id);
         return preferenciasDoUsuario.stream()
                 .map(PreferenciaDTO::new)
                 .collect(Collectors.toList());
