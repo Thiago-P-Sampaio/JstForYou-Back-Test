@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConteudosRepositorio extends JpaRepository<EntidadeConteudos, Long> {
+
+    String findByTitulo(String titulo);
 }
