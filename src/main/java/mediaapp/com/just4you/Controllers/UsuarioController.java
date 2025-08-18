@@ -13,21 +13,21 @@ import java.util.List;
 @RequestMapping (value = "/user")
 public class UsuarioController {
 
-    @Autowired
-    UsuarioService usuarioService;
-
-
-    @GetMapping("/buscar")
-    public ResponseEntity<List<EntidadeUsuario>> buscar(){
-        return ResponseEntity.ok().body(usuarioService.buscarUsuarios());
-    }
-
-    @GetMapping("/buscar/{id}")
-    public ResponseEntity buscarUsuario(@PathVariable Long id){
-        EntidadeUsuario usuario = usuarioService.buscarUsuario(id);
-        if(usuario != null)return ResponseEntity.ok(usuario);
-        else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
-    }
+//    @Autowired
+//    UsuarioService usuarioService;
+//
+//
+//    @GetMapping("/buscar")
+//    public ResponseEntity<List<EntidadeUsuario>> buscar(){
+//        return ResponseEntity.ok().body(usuarioService.buscarUsuarios());
+//    }
+//
+//    @GetMapping("/buscar/{id}")
+//    public ResponseEntity buscarUsuario(@PathVariable Long id){
+//        EntidadeUsuario usuario = usuarioService.buscarUsuario(id);
+//        if(usuario != null)return ResponseEntity.ok(usuario);
+//        else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+//    }
 
 
 }
