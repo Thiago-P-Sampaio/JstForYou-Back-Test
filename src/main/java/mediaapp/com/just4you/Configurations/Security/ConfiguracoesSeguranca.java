@@ -32,10 +32,12 @@ public class ConfiguracoesSeguranca implements WebMvcConfigurer {
                  .csrf(csrf -> csrf.disable())
                  .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                  .authorizeHttpRequests(authorize -> authorize
-                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                         .requestMatchers(HttpMethod.GET, "/user/buscar/{id}").hasRole("USER")
-                         .requestMatchers(HttpMethod.GET, "/user/buscar").hasRole("USER"))
+//                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+//                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+//                         .requestMatchers(HttpMethod.GET, "/user/buscar/{id}").hasRole("USER")
+//                         .requestMatchers(HttpMethod.GET, "/user/buscar").hasRole("USER")
+                                 .anyRequest().permitAll() // Liberando as ROTAS TEMPORÁRIAMENTE
+                 )
 
                  .addFilterBefore(filtroSeguranca, UsernamePasswordAuthenticationFilter.class )
                  .cors(cors -> cors.configurationSource(corsConfigurationSource()))
