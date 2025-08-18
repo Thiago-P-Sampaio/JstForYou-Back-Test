@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ListaUsuarioRepositorio extends JpaRepository<EntidadeListaUsuario, Long> {
+
+    EntidadeListaUsuario findByUsuarioId(Long id);
 }

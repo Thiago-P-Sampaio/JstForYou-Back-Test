@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface PreferenciaRepositorio  extends JpaRepository<EntidadePreferencia, Long> {
 
-    List<EntidadePreferencia> findByUsuarioId(Long idUsuario);
+
+    List<EntidadePreferencia> findByUsuario_UsuarioId(Long idUsuario);
 }

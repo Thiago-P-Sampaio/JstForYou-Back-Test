@@ -5,4 +5,6 @@ import mediaapp.com.just4you.Entities.EntidadeListaConteudoPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConteudosListaRepositorio extends JpaRepository<EntidadeListaConteudo, EntidadeListaConteudoPK> {
+
+    EntidadeListaConteudo findByUsuario(Long Id)
 }
