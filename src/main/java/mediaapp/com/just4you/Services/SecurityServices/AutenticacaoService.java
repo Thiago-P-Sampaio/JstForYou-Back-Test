@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 public class AutenticacaoService {
@@ -53,12 +54,36 @@ public class AutenticacaoService {
 
         this.usuarioRepositorio.save(usuario);
 
+
         EntidadeListaUsuario listaUsuario = new EntidadeListaUsuario();
         listaUsuario.setUsuario(usuario);
         listaUsuarioRepositorio.save(listaUsuario);
 
 
         return true;
+    }
+
+    public boolean alterarDadosUsuario(@RequestBody @Valid CadastrarDTO dados, Long id){
+        if(this.usuarioRepositorio.findById(id) != null) return false;
+        EntidadeUsuario editarUsuario = usuarioRepositorio.findById(id).get();
+
+        Optional.ofNullable(dados.nome())
+                .filter(novoNome -> !novoNome.isBlank() && !novoNome.equals(editarUsuario.getNome()))
+                .ifPresent(editarUsuario::setNome);
+
+        Optional.ofNullable(dados.email())
+                .filter(novoEmail -> !novoEmail.isBlank() && !novoEmail.equals(editarUsuario.getEmail()))
+                .ifPresent(editarUsuario::setEmail);
+
+
+        Optional.ofNullable(dados.senha())
+                .filter(novaSenha -> !novaSenha.isBlank() && !novaSenha.equals(editarUsuario.getSenha()))
+                .ifPresent(senhaCript -> {
+                    String senhaCriptografada = new BCryptPasswordEncoder().encode(dados.senha());
+                    editarUsuario.setSenha(senhaCriptografada);
+                });
+
+            return true;
     }
 
 
