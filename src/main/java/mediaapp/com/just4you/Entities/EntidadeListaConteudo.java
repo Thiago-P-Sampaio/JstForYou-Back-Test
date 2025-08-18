@@ -66,4 +66,5 @@ public class EntidadeListaConteudo {
     public void setAvalicao(Boolean avalicao) {
         this.avalicao = avalicao;
     }
+
 }

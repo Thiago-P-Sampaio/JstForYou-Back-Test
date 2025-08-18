@@ -12,6 +12,9 @@ public class EntidadeConteudos {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long conteudoId;
     private String titulo;
+    @Enumerated(EnumType.STRING)
+    private TipoMedia media;
+    private Long mediaId;
 
     //Relacionamentos
 
@@ -22,9 +25,11 @@ public class EntidadeConteudos {
     public EntidadeConteudos() {
     }
 
-    public EntidadeConteudos(Long conteudoId, String titulo) {
+    public EntidadeConteudos(Long conteudoId, String titulo,  TipoMedia media, Long mediaId) {
         this.conteudoId = conteudoId;
         this.titulo = titulo;
+        this.media = media;
+        this.mediaId = mediaId;
     }
 
     public Long getConteudoId() {
@@ -49,5 +54,21 @@ public class EntidadeConteudos {
 
     public void setListaConteudos(Set<EntidadeListaConteudo> listaConteudos) {
         this.listaConteudos = listaConteudos;
+    }
+
+    public TipoMedia getMedia() {
+        return media;
+    }
+
+    public void setMedia(TipoMedia media) {
+        this.media = media;
+    }
+
+    public Long getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 }
