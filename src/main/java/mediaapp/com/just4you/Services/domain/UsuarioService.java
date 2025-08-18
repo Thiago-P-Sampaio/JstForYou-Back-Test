@@ -1,12 +1,11 @@
-package mediaapp.com.just4you.Services;
+package mediaapp.com.just4you.Services.domain;
 
-import jakarta.transaction.Transactional;
+import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +16,31 @@ public class UsuarioService {
     @Autowired
     UsuarioRepositorio usuarioRepositorio;
 
-    @Transactional
-    public List<EntidadeUsuario> buscarUsuarios(){
-        return usuarioRepositorio.findAll();
+ // GET
+    @Transactional(readOnly = true)
+    public UsuarioDTO buscarUsuarioPorId(Long id){
+        EntidadeUsuario usuario = usuarioRepositorio.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+
+
+        return new UsuarioDTO(usuario);
     }
 
-    @Transactional
-    public EntidadeUsuario buscarUsuario(Long id){
-    return usuarioRepositorio.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
+    public boolean deletarUsuario(Long id){
+        Optional<EntidadeUsuario> usuario = usuarioRepositorio.findById(id);
+        if(usuario.isPresent()){
+            usuarioRepositorio.deleteById(id);
+            return true;
+        }
+        return false;
     }
+
+
+
+
+
+
+
 }
+
+
