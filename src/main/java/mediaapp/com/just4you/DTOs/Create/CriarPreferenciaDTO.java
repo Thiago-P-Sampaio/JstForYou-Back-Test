@@ -17,17 +17,17 @@ public class CriarPreferenciaDTO {
     public CriarPreferenciaDTO() {
     }
 
-    public CriarPreferenciaDTO(Long id, String descricao) {
-        this.usuarioId = id;
+    public CriarPreferenciaDTO(Long usuarioId, String descricao) {
+        this.usuarioId = usuarioId;
         this.descricao = descricao;
     }
 
-    public Long getId() {
+    public Long getUsuarioId() {
         return usuarioId;
     }
 
-    public void setId(Long id) {
-        this.usuarioId = id;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String getDescricao() {
