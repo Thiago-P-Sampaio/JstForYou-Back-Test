@@ -47,4 +47,12 @@ public class EntidadeListaUsuario {
     public void setUsuario(EntidadeUsuario usuario) {
         this.usuario = usuario;
     }
+
+    public Set<EntidadeListaConteudo> getListaConteudos() {
+        return listaConteudos;
+    }
+
+    public void setListaConteudos(Set<EntidadeListaConteudo> listaConteudos) {
+        this.listaConteudos = listaConteudos;
+    }
 }

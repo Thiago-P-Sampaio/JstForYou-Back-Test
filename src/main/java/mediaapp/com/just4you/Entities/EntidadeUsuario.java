@@ -40,8 +40,8 @@ public class EntidadeUsuario implements UserDetails {
 
     @OneToMany( mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EntidadePreferencia> preferencias = new ArrayList<>();
-
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+// VERIFICAR AQUI POSTERIORMENTE!!!
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private EntidadeListaUsuario listaUsuario;
 
     //
