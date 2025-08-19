@@ -1,5 +1,6 @@
 package mediaapp.com.just4you.Services.domain;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Create.ConteudoParaListaDTO;
@@ -34,40 +35,47 @@ public class ListaConteudoService {
     ListaUsuarioRepositorio listaUsuarioRepositorio;
 
     @Transactional
-    public EntidadeListaUsuario adicionarConteudoLista(@RequestBody @Valid CriarConteudoDTO dto, Long usuarioId){
-        boolean entidadeExiste = usuarioRepositorio.existsById(usuarioId);
-        boolean conteudoExiste = conteudosRepositorio.findByMediaAndMediaId(TipoMedia.fromValue(dto.getTipoMedia()), dto.getMediaId());
-        if(conteudoExiste) throw new IllegalArgumentException("Conteúdo já existe no banco!");
+    public void adicionarConteudoLista(CriarConteudoDTO dto, Long usuarioId) {
 
-            if(entidadeExiste) {
-                EntidadeConteudos novoConteudo = new EntidadeConteudos();
-                Optional.ofNullable(dto.getTitulo())
-                        .filter(s -> s.isBlank())
-                        .ifPresent(novoConteudo::setTitulo);
+        // 1. Validar se o usuário existe. Se não, lançar uma exceção.
+        EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + usuarioId));
 
-                Optional.ofNullable(dto.getTipoMedia())
-                        .filter(s -> !s.isBlank())
-                        .map(TipoMedia::fromValue)
-                        .ifPresent(novoConteudo::setMedia);
-
-                novoConteudo.setMediaId(dto.getMediaId());
-                conteudosRepositorio.save(novoConteudo);
-
-            EntidadeUsuario usuarioExistente = usuarioRepositorio.findById(usuarioId).get();
-            EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuarioId(usuarioId);
-
-            EntidadeListaConteudo listaConteudo = new EntidadeListaConteudo();
-
-            listaConteudo.setConteudo(novoConteudo);
-            listaConteudo.setLista(listaUsuario);
-            listaConteudo.setId(new EntidadeListaConteudoPK(listaUsuario.getListaId(), novoConteudo.getConteudoId()));
-            return conteudosListaRepositorio.save(listaConteudo);
-
-            }
+        // 2. Buscar a lista do usuário.
+        EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuarioId(usuario.getUsuarioId())
+                .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
 
 
+        TipoMedia tipoMedia = TipoMedia.fromValue(dto.getTipoMedia());
+        EntidadeConteudos conteudo = conteudosRepositorio.findByMediaIdAndMedia(dto.getMediaId(), tipoMedia)
+                .orElseGet(() -> {
+
+                    EntidadeConteudos novoConteudo = new EntidadeConteudos();
+                    novoConteudo.setMediaId(dto.getMediaId());
+                    novoConteudo.setMedia(tipoMedia);
 
 
+                    Optional.ofNullable(dto.getTitulo())
+                            .filter(titulo -> !titulo.isBlank())
+                            .ifPresent(novoConteudo::setTitulo);
+
+
+                    return conteudosRepositorio.save(novoConteudo);
+                });
+
+        EntidadeListaConteudoPK id = new EntidadeListaConteudoPK(listaUsuario.getListaId(), conteudo.getConteudoId());
+
+
+        boolean associacaoExiste = conteudosListaRepositorio.existsById(id);
+
+        if (!associacaoExiste) {
+
+            EntidadeListaConteudo novaAssociacao = new EntidadeListaConteudo();
+            novaAssociacao.setId(id);
+            novaAssociacao.setLista(listaUsuario);
+            novaAssociacao.setConteudo(conteudo);
+            conteudosListaRepositorio.save(novaAssociacao);
+        }
 
     }
 }
