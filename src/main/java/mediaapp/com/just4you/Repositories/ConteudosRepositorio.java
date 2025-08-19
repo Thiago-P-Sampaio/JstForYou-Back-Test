@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface ConteudosRepositorio extends JpaRepository<EntidadeConteudos, Long> {
 
     boolean findByMediaAndMediaId(TipoMedia media, Long mediaId);
+
+   Optional<EntidadeConteudos> findByMediaIdAndMedia(Long mediaId, TipoMedia media);
 }

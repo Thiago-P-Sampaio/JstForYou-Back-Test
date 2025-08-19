@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConteudosListaRepositorio extends JpaRepository<EntidadeListaConteudo, EntidadeListaConteudoPK> {
 
-    EntidadeListaConteudo findByUsuario(Long Id)
+    EntidadeListaConteudo findByUsuario(Long Id);
 }
