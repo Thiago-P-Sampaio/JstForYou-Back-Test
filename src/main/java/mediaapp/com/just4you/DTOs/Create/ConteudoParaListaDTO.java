@@ -1,25 +1,59 @@
 package mediaapp.com.just4you.DTOs.Create;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ConteudoParaListaDTO {
 
+    @NotBlank
+    @NotNull
+    private String titulo;
 
-    private Long conteudoId;
+    @NotBlank
+    @NotNull
+    private String tipoMedia;
+
+    @NotBlank
+    @NotNull
+    private Long mediaId;
+
+    @NotBlank
+    @NotNull
     private Boolean avaliacao;
+
+
+    public ConteudoParaListaDTO(String titulo, String tipoMedia, Long mediaId, Boolean avaliacao) {
+        this.titulo = titulo;
+        this.tipoMedia = tipoMedia;
+        this.mediaId = mediaId;
+        this.avaliacao = avaliacao;
+    }
 
     public ConteudoParaListaDTO() {
     }
 
-    public ConteudoParaListaDTO(Long conteudoId, Boolean avaliacao) {
-        this.conteudoId = conteudoId;
-        this.avaliacao = avaliacao;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public Long getConteudoId() {
-        return conteudoId;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public void setConteudoId(Long conteudoId) {
-        this.conteudoId = conteudoId;
+    public String getTipoMedia() {
+        return tipoMedia;
+    }
+
+    public void setTipoMedia(String tipoMedia) {
+        this.tipoMedia = tipoMedia;
+    }
+
+    public Long getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
     public Boolean getAvaliacao() {
