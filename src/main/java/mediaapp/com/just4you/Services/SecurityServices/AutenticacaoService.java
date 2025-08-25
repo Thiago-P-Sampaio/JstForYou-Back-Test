@@ -3,6 +3,7 @@ package mediaapp.com.just4you.Services.SecurityServices;
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
 import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
+import mediaapp.com.just4you.DTOs.UserAcess.RespostaLoginDTO;
 import mediaapp.com.just4you.Entities.EntidadeListaUsuario;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.Instant;
@@ -33,11 +35,12 @@ public class AutenticacaoService {
     @Autowired
     ListaUsuarioRepositorio listaUsuarioRepositorio;
 
-    public String login(@RequestBody @Valid AuntenticacaoDTO dados ){
+    public RespostaLoginDTO login(@RequestBody @Valid AuntenticacaoDTO dados ){
         var credenciaisUsuario = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
         var auth = this.authenticationManager.authenticate(credenciaisUsuario);
+        EntidadeUsuario usuario = (EntidadeUsuario) auth.getPrincipal();
         var token = tokenService.gerarToken((EntidadeUsuario) auth.getPrincipal());
-        return "Chave de acesso: " + token;
+        return new RespostaLoginDTO(token, usuario.getNome(), usuario.getUsuarioId() );
 
     }
 
@@ -63,28 +66,38 @@ public class AutenticacaoService {
         return true;
     }
 
-    public boolean alterarDadosUsuario(@RequestBody @Valid CadastrarDTO dados, Long id){
-        if(this.usuarioRepositorio.findById(id) != null) return false;
-        EntidadeUsuario editarUsuario = usuarioRepositorio.findById(id).get();
+    @Transactional
+    public boolean alterarDadosUsuario(@Valid CadastrarDTO dados, Long id) {
+        Optional<EntidadeUsuario> usuarioOptional = usuarioRepositorio.findById(id);
 
+        if (usuarioOptional.isEmpty()) {
+            return false; // usuário não encontrado
+        }
+
+        EntidadeUsuario editarUsuario = usuarioOptional.get();
+
+        // Atualiza nome se for diferente
         Optional.ofNullable(dados.nome())
                 .filter(novoNome -> !novoNome.isBlank() && !novoNome.equals(editarUsuario.getNome()))
                 .ifPresent(editarUsuario::setNome);
 
+        // Atualiza email se for diferente
         Optional.ofNullable(dados.email())
                 .filter(novoEmail -> !novoEmail.isBlank() && !novoEmail.equals(editarUsuario.getEmail()))
                 .ifPresent(editarUsuario::setEmail);
 
-
+        // Atualiza senha se for diferente
         Optional.ofNullable(dados.senha())
-                .filter(novaSenha -> !novaSenha.isBlank() && !novaSenha.equals(editarUsuario.getSenha()))
-                .ifPresent(senhaCript -> {
-                    String senhaCriptografada = new BCryptPasswordEncoder().encode(dados.senha());
+                .filter(novaSenha -> !novaSenha.isBlank() && !new BCryptPasswordEncoder().matches(novaSenha, editarUsuario.getSenha()))
+                .ifPresent(novaSenha -> {
+                    String senhaCriptografada = new BCryptPasswordEncoder().encode(novaSenha);
                     editarUsuario.setSenha(senhaCriptografada);
                 });
 
-            return true;
+        usuarioRepositorio.save(editarUsuario); // salva alterações
+        return true;
     }
+
 
 
 }
