@@ -41,7 +41,7 @@ public class ListaConteudoService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + usuarioId));
 
         // 2. Buscar a lista do usuário.
-        EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuarioId(usuario.getUsuarioId())
+        EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
 
 
@@ -87,7 +87,7 @@ public class ListaConteudoService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + usuarioId));
 
         // 2. Buscar a lista do usuário
-        EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuarioId(usuario.getUsuarioId())
+        EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
 
         // 3. Buscar o conteúdo
@@ -117,7 +117,7 @@ public class ListaConteudoService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + usuarioId));
 
         // 2. Buscar a lista do usuário
-        EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuarioId(usuario.getUsuarioId())
+        EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
 
         // 3. Retornar DTO

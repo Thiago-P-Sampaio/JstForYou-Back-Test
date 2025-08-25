@@ -17,11 +17,11 @@ public class AutenticacaoController {
     @Autowired
     AutenticacaoService autenticacaoService;
 
-    @Autowired
+
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuntenticacaoDTO dados ){
+    public ResponseEntity<?> login(@RequestBody @Valid AuntenticacaoDTO dados ){
     return ResponseEntity.ok(autenticacaoService.login(dados));
     }
 

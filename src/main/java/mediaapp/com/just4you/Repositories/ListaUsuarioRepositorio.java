@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ListaUsuarioRepositorio extends JpaRepository<EntidadeListaUsuario, Long> {
 
-   Optional<EntidadeListaUsuario> findByUsuarioId(Long id);
+   Optional<EntidadeListaUsuario> findByUsuario_UsuarioId(Long usuarioId);
 }
