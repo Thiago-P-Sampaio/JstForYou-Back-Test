@@ -28,9 +28,9 @@ public class PreferenciaService {
     PreferenciaRepositorio preferenciaRepositorio;
 
     @Transactional
-    public EntidadePreferencia  criarPreferencia(@RequestBody @Valid CriarPreferenciaDTO dto, Long id){
-        EntidadeUsuario entidadeExistente = usuarioRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário com ID " + id + " não encontrado."));
+    public CriarPreferenciaDTO  criarPreferencia(CriarPreferenciaDTO dto){
+        EntidadeUsuario entidadeExistente = usuarioRepositorio.findById(dto.getUsuarioId())
+                .orElseThrow(() -> new RuntimeException("Usuário com ID " + dto.getUsuarioId() + " não encontrado."));
 
         EntidadePreferencia novaPreferencia = new EntidadePreferencia();
         Optional.ofNullable(dto.getDescricao())
@@ -38,7 +38,8 @@ public class PreferenciaService {
                 .ifPresent(novaPreferencia::setDescricao);
 
         novaPreferencia.setUsuario(entidadeExistente);
-        return preferenciaRepositorio.save(novaPreferencia);
+         preferenciaRepositorio.save(novaPreferencia);
+         return new CriarPreferenciaDTO(novaPreferencia);
 
     }
 

@@ -21,12 +21,10 @@ public class PreferenciaController {
     PreferenciaService preferenciaService;
 
 
-    @PostMapping("/usuario/{usuarioId}")
-    public ResponseEntity<EntidadePreferencia> criarPreferencia(
-            @PathVariable Long usuarioId,
+    @PostMapping("/usuario")
+    public ResponseEntity<?> criarPreferencia(
             @RequestBody @Valid CriarPreferenciaDTO dto) {
-        EntidadePreferencia preferencia = preferenciaService.criarPreferencia(dto, usuarioId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(preferencia);
+        return ResponseEntity.status(HttpStatus.CREATED).body(preferenciaService.criarPreferencia(dto));
     }
 
     @DeleteMapping("/{preferenciaId}")

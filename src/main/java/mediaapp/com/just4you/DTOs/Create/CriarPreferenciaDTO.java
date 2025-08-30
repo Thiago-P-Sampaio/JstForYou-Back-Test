@@ -2,11 +2,11 @@ package mediaapp.com.just4you.DTOs.Create;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import mediaapp.com.just4you.Entities.EntidadePreferencia;
 
 public class CriarPreferenciaDTO {
 
     @NotNull
-    @NotBlank
     private Long usuarioId;
 
     @NotNull
@@ -15,6 +15,11 @@ public class CriarPreferenciaDTO {
 
 
     public CriarPreferenciaDTO() {
+    }
+
+    public CriarPreferenciaDTO(EntidadePreferencia entity){
+        usuarioId = entity.getUsuario().getUsuarioId();
+        descricao = entity.getDescricao();
     }
 
     public CriarPreferenciaDTO(Long usuarioId, String descricao) {
