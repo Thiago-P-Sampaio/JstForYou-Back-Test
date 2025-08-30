@@ -14,7 +14,6 @@ public class CriarConteudoDTO {
     @NotNull
     private String tipoMedia;
 
-    @NotBlank
     @NotNull
     private Long mediaId;
 

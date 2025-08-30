@@ -22,12 +22,12 @@ public class ConteudoService {
 
     public EntidadeConteudos adicionarConteudo(@RequestBody @Valid CriarConteudoDTO dto){
 
-        boolean exists = conteudosRepositorio.findByMediaAndMediaId(TipoMedia.fromValue(dto.getTipoMedia()), dto.getMediaId());
-        if(exists) throw new IllegalArgumentException("Conteúdo já existe no banco!");
+        Optional<EntidadeConteudos> exists = conteudosRepositorio.findByMediaIdAndMedia(dto.getMediaId(), TipoMedia.fromValue(dto.getTipoMedia()));
+        if(exists.isPresent()) throw new IllegalArgumentException("Conteúdo já existe no banco!");
 
         EntidadeConteudos novoConteudo = new EntidadeConteudos();
         Optional.ofNullable(dto.getTitulo())
-                .filter(s -> s.isBlank())
+                .filter(s -> !s.isBlank())
                 .ifPresent(novoConteudo::setTitulo);
 
         Optional.ofNullable(dto.getTipoMedia())

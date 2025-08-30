@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ConteudosRepositorio extends JpaRepository<EntidadeConteudos, Long> {
 
-    boolean findByMediaAndMediaId(TipoMedia media, Long mediaId);
+//    boolean findByMediaAndMediaId(TipoMedia media, Long mediaId);
 
    Optional<EntidadeConteudos> findByMediaIdAndMedia(Long mediaId, TipoMedia media);
 }
