@@ -13,12 +13,10 @@ public class ConteudoParaListaDTO {
     @NotNull
     private String tipoMedia;
 
-    @NotBlank
     @NotNull
     private Long mediaId;
 
-    @NotBlank
-    @NotNull
+
     private Boolean avaliacao;
 
 
