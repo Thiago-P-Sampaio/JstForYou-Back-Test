@@ -73,7 +73,7 @@ public class ListaConteudoService {
             novaAssociacao.setId(id);
             novaAssociacao.setLista(listaUsuario);
             novaAssociacao.setConteudo(conteudo);
-            novaAssociacao.setAvalicao(dto.getAvaliacao());
+            novaAssociacao.setAvaliacao(dto.getAvaliacao());
             conteudosListaRepositorio.save(novaAssociacao);
         }
 
