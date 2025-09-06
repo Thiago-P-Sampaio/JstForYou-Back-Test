@@ -22,17 +22,17 @@ public class EntidadeListaConteudo {
     private EntidadeConteudos conteudo;
 
 
-    private Boolean avalicao;
+    private Boolean avaliacao;
 
     public EntidadeListaConteudo() {
     }
 
 
-    public EntidadeListaConteudo(EntidadeListaConteudoPK id, EntidadeListaUsuario lista, EntidadeConteudos conteudo, Boolean avalicao) {
+    public EntidadeListaConteudo(EntidadeListaConteudoPK id, EntidadeListaUsuario lista, EntidadeConteudos conteudo, Boolean avaliacao) {
         this.id = id;
         this.lista = lista;
         this.conteudo = conteudo;
-        this.avalicao = avalicao;
+        this.avaliacao = avaliacao;
     }
 
     public EntidadeListaConteudoPK getId() {
@@ -59,12 +59,12 @@ public class EntidadeListaConteudo {
         this.conteudo = conteudo;
     }
 
-    public Boolean getAvalicao() {
-        return avalicao;
+    public Boolean getAvaliacao() {
+        return avaliacao;
     }
 
-    public void setAvalicao(Boolean avalicao) {
-        this.avalicao = avalicao;
+    public void setAvaliacao(Boolean avaliacao) {
+        this.avaliacao = avaliacao;
     }
 
 }
