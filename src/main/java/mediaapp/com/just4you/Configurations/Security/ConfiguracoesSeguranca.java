@@ -59,8 +59,8 @@ public class ConfiguracoesSeguranca implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://127.0.0.1:5500")
+        registry.addMapping("http://localhost:5173")
+                .allowedOrigins("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true);
@@ -70,7 +70,7 @@ public class ConfiguracoesSeguranca implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://127.0.0.1:5500");
+        configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedMethod("GET");
         configuration.addAllowedMethod("POST");
         configuration.addAllowedMethod("PUT");
