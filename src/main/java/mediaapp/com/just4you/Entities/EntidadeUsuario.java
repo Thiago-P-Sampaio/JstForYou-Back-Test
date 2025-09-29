@@ -44,6 +44,10 @@ public class EntidadeUsuario implements UserDetails {
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private EntidadeListaUsuario listaUsuario;
 
+
+    @ManyToOne
+    @JoinColumn(name = "avatar_id")
+    private EntidadeAvatar avatar;
     //
 
 
