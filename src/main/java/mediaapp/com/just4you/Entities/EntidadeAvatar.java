@@ -2,7 +2,6 @@ package mediaapp.com.just4you.Entities;
 
 
 import jakarta.persistence.*;
-import org.graalvm.nativeimage.c.type.CUnsigned;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +13,9 @@ public class EntidadeAvatar {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String url;
+
 
     private String descricao;
 
