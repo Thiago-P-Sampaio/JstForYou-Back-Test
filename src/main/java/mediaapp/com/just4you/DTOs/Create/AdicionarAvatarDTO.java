@@ -3,17 +3,17 @@ package mediaapp.com.just4you.DTOs.Create;
 
 
 
-public class AdicionarAvatar {
+public class AdicionarAvatarDTO {
 
 
     private Long id;
     private String url;
     private String descricao;
 
-    public AdicionarAvatar() {
+    public AdicionarAvatarDTO() {
     }
 
-    public AdicionarAvatar(Long id, String url, String descricao) {
+    public AdicionarAvatarDTO(Long id, String url, String descricao) {
         this.id = id;
         this.url = url;
         this.descricao = descricao;
