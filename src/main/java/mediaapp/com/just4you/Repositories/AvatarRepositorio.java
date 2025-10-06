@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface AvatarRepositorio extends JpaRepository<EntidadeAvatar, Long > {
 
-    Optional<EntidadeAvatar> existsByUrl(String url);
+    boolean existsByUrl(String url);
 }

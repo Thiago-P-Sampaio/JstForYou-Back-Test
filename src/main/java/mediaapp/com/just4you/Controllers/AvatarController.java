@@ -30,7 +30,7 @@ public class AvatarController {
     }
 
     @DeleteMapping("/dell/{id}")
-    public ResponseEntity<EntidadeAvatar> deletarAvatar(@PathVariable Long id) {
+    public ResponseEntity<?> deletarAvatar(@PathVariable Long id) {
         avatarService.deletarAvatar(id);
         return ResponseEntity.noContent().build();
     }

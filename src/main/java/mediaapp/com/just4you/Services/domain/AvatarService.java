@@ -25,20 +25,24 @@ public class AvatarService {
 
     public AvatarDTO novoAvatar(AdicionarAvatarDTO dto){
 
-        EntidadeAvatar entidadeAvatar = avatarRepositorio.existsByUrl(dto.getUrl())
-                .orElseThrow(() -> new RuntimeException("Já existe um AVATAR com essa URL"));
+        boolean entidadeExistente = avatarRepositorio.existsByUrl(dto.getUrl());
+        if(entidadeExistente){
+            throw new RuntimeException("Já existe um avatar com a URL informada!");
+        }
 
+        EntidadeAvatar entidadeAvatar = new EntidadeAvatar();
         entidadeAvatar.setDescricao(dto.getDescricao());
         entidadeAvatar.setUrl(dto.getUrl());
 
         EntidadeAvatar entidadeSalva = avatarRepositorio.save(entidadeAvatar);
-        return  new AvatarDTO(entidadeAvatar);
+
+        return  new AvatarDTO(entidadeSalva);
     }
 
 
     public AvatarDTO atualizarAvatar(AdicionarAvatarDTO dto, Long id){
             EntidadeAvatar entidadeAvatar = avatarRepositorio.findById(id)
-                            .orElseThrow(() -> new RuntimeException("Avatar com ID " + id + " não encontrado."));
+                            .orElseThrow(() -> new RuntimeException("Avatar com ID " + id + " não encontrado.")); /// SUBSTITUIR POR EXCEÇÃO
 
             Optional.ofNullable(dto.getUrl())
                     .filter(avatar -> !avatar.isBlank() && !entidadeAvatar.getUrl().equals(dto.getUrl()))
@@ -55,7 +59,7 @@ public class AvatarService {
     @Transactional
     public void deletarAvatar(Long id){
             EntidadeAvatar avatarDeletar = avatarRepositorio.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Avatar com ID:" + id + " Não encontrado" )
+                    .orElseThrow(() -> new RuntimeException("Avatar com ID:" + id + " Não encontrado" ) /// SUBSTITUIR POR EXCEÇÃO
                             );
 
             usuarioRepositorio.desassociarAvatar(avatarDeletar);
@@ -72,7 +76,7 @@ public class AvatarService {
     public AvatarDTO buscarAvatarPorId(Long id){
        return avatarRepositorio.findById(id)
                 .map(AvatarDTO::new)
-                .orElseThrow(() -> new RuntimeException("Avatar com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new RuntimeException("Avatar com ID " + id + " não encontrado.")); /// SUBSTITUIR POR EXCEÇÃO
     }
 
 }
