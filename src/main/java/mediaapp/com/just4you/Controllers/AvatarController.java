@@ -1,12 +1,15 @@
 package mediaapp.com.just4you.Controllers;
 
 import mediaapp.com.just4you.DTOs.Create.AdicionarAvatarDTO;
+import mediaapp.com.just4you.DTOs.Response.AvatarDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Services.domain.AvatarService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/jfy/avatar")
@@ -30,5 +33,15 @@ public class AvatarController {
     public ResponseEntity<EntidadeAvatar> deletarAvatar(@PathVariable Long id) {
         avatarService.deletarAvatar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<AvatarDTO> buscarAvatar(@PathVariable Long id){
+        return ResponseEntity.ok().body(avatarService.buscarAvatarPorId(id));
+    }
+
+    @GetMapping("/get/all")
+    public ResponseEntity<List<AvatarDTO>> buscarAvatares(){
+        return ResponseEntity.ok().body(avatarService.listarAvatars());
     }
 }
