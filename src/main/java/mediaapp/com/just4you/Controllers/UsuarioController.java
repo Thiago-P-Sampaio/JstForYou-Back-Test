@@ -6,6 +6,8 @@ import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Services.domain.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,12 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorId(id));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<UsuarioDTO>> buscarTodosPorPagina(Pageable pagina){
+        Page<UsuarioDTO> paginaDeUsuarios = usuarioService.buscarTodosPorPagina(pagina);
+        return ResponseEntity.ok().body(paginaDeUsuarios);
     }
 
     // Deletar usuário por ID

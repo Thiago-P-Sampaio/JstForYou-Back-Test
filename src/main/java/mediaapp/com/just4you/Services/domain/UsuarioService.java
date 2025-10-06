@@ -11,6 +11,8 @@ import mediaapp.com.just4you.Repositories.AvatarRepositorio;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,12 @@ public class UsuarioService {
 
         usuarioRepositorio.delete(usuario);
 
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UsuarioDTO> buscarTodosPorPagina(Pageable pagina){
+        Page<EntidadeUsuario> entidadeUsuarios = usuarioRepositorio.findAll(pagina);
+        return entidadeUsuarios.map(UsuarioDTO::new);
     }
 
     @Transactional
