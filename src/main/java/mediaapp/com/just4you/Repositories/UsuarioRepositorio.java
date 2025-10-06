@@ -18,4 +18,9 @@ public interface UsuarioRepositorio extends JpaRepository<EntidadeUsuario, Long>
     @Modifying
     @Query("UPDATE EntidadeUsuario u SET u.avatar = NULL WHERE u.avatar = :avatar")
     void desassociarAvatar(@Param("avatar")EntidadeAvatar avatar);
+
+
+    @Modifying
+    @Query("UPDATE EntidadeUsuario u SET u.avatar = NULL WHERE u.usuarioId = :usuario")
+    void dessasociarUsuarioAvatar(@Param("usuario") EntidadeUsuario usuario);
 }

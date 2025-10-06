@@ -141,6 +141,14 @@ public class EntidadeUsuario implements UserDetails {
         this.role = role;
     }
 
+    public EntidadeAvatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(EntidadeAvatar avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));

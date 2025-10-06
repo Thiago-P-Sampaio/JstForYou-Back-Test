@@ -1,5 +1,7 @@
 package mediaapp.com.just4you.Controllers;
 
+import jakarta.validation.Valid;
+import mediaapp.com.just4you.DTOs.Create.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Services.domain.UsuarioService;
@@ -17,22 +19,26 @@ public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
 
-// Buscar usuário por ID
-@GetMapping("/{id}")
-public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Long id) {
-    UsuarioDTO usuario = usuarioService.buscarUsuarioPorId(id);
-    return ResponseEntity.ok(usuario);
-}
+    // Buscar usuário por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioService.buscarUsuarioPorId(id));
+    }
 
     // Deletar usuário por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
-        boolean deletado = usuarioService.deletarUsuario(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        usuarioService.deletarUsuario(id);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<UsuarioDTO> alterarDadosUsuario(
+            @PathVariable Long id,
+            @RequestBody @Valid EditarUsuario dados) {
+
+        return ResponseEntity.ok().body(usuarioService.alterarDadosUsuario(dados, id));
     }
 
 

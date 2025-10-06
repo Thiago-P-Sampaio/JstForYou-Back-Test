@@ -66,38 +66,6 @@ public class AutenticacaoService {
         return true;
     }
 
-    @Transactional
-    public boolean alterarDadosUsuario(@Valid CadastrarDTO dados, Long id) {
-        Optional<EntidadeUsuario> usuarioOptional = usuarioRepositorio.findById(id);
-
-        if (usuarioOptional.isEmpty()) {
-            return false; // usuário não encontrado
-        }
-
-        EntidadeUsuario editarUsuario = usuarioOptional.get();
-
-        // Atualiza nome se for diferente
-        Optional.ofNullable(dados.nome())
-                .filter(novoNome -> !novoNome.isBlank() && !novoNome.equals(editarUsuario.getNome()))
-                .ifPresent(editarUsuario::setNome);
-
-        // Atualiza email se for diferente
-        Optional.ofNullable(dados.email())
-                .filter(novoEmail -> !novoEmail.isBlank() && !novoEmail.equals(editarUsuario.getEmail()))
-                .ifPresent(editarUsuario::setEmail);
-
-        // Atualiza senha se for diferente
-        Optional.ofNullable(dados.senha())
-                .filter(novaSenha -> !novaSenha.isBlank() && !new BCryptPasswordEncoder().matches(novaSenha, editarUsuario.getSenha()))
-                .ifPresent(novaSenha -> {
-                    String senhaCriptografada = new BCryptPasswordEncoder().encode(novaSenha);
-                    editarUsuario.setSenha(senhaCriptografada);
-                });
-
-        usuarioRepositorio.save(editarUsuario); // salva alterações
-        return true;
-    }
-
 
 
 }

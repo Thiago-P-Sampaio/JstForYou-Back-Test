@@ -1,6 +1,7 @@
 package mediaapp.com.just4you.Controllers.Access;
 
 import jakarta.validation.Valid;
+import mediaapp.com.just4you.DTOs.Create.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
 import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
 import mediaapp.com.just4you.Services.SecurityServices.AutenticacaoService;
@@ -31,16 +32,4 @@ public class AutenticacaoController {
         else  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não pode ser cadastrado, tente novamente!");
     }
 
-
-    @PutMapping("/user/edit/{id}")
-    public ResponseEntity<Void> alterarDadosUsuario(
-            @PathVariable Long id,
-            @RequestBody @Valid CadastrarDTO dados) {
-        boolean atualizado = autenticacaoService.alterarDadosUsuario(dados, id);
-        if (atualizado) {
-            return ResponseEntity.noContent().build(); // atualizado com sucesso
-        } else {
-            return ResponseEntity.notFound().build(); // usuário não existe
-        }
-    }
 }
