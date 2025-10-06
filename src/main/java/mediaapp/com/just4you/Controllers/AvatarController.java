@@ -20,12 +20,12 @@ public class AvatarController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<EntidadeAvatar> adicionarAvatar(@RequestBody AdicionarAvatarDTO dto) {
+    public ResponseEntity<AvatarDTO> adicionarAvatar(@RequestBody AdicionarAvatarDTO dto) {
         return ResponseEntity.ok().body(avatarService.novoAvatar(dto));
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<EntidadeAvatar> editarAvatar(@PathVariable Long id, @RequestBody AdicionarAvatarDTO dto) {
+    public ResponseEntity<AvatarDTO> editarAvatar(@PathVariable Long id, @RequestBody AdicionarAvatarDTO dto) {
         return ResponseEntity.ok().body(avatarService.atualizarAvatar(dto, id));
     }
 

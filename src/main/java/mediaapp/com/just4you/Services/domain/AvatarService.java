@@ -23,21 +23,23 @@ public class AvatarService {
 
 
 
-    public EntidadeAvatar novoAvatar(AdicionarAvatarDTO dto){
+    public AvatarDTO novoAvatar(AdicionarAvatarDTO dto){
 
-        if(!avatarRepositorio.existsByUrl(dto.getUrl())){
-            EntidadeAvatar entidadeAvatar = new EntidadeAvatar();
-            entidadeAvatar.setDescricao(dto.getDescricao());
-            entidadeAvatar.setUrl(dto.getUrl());
-            return avatarRepositorio.save(entidadeAvatar);
-        }
-        throw new RuntimeException("Não deu"); // Em testes!
+        EntidadeAvatar entidadeAvatar = avatarRepositorio.existsByUrl(dto.getUrl())
+                .orElseThrow(() -> new RuntimeException("Já existe um AVATAR com essa URL"));
+
+        entidadeAvatar.setDescricao(dto.getDescricao());
+        entidadeAvatar.setUrl(dto.getUrl());
+
+        EntidadeAvatar entidadeSalva = avatarRepositorio.save(entidadeAvatar);
+        return  new AvatarDTO(entidadeAvatar);
     }
 
 
-    public EntidadeAvatar atualizarAvatar(AdicionarAvatarDTO dto, Long id){
-        if(avatarRepositorio.existsById(id)){
-            EntidadeAvatar entidadeAvatar = avatarRepositorio.findById(id).get();
+    public AvatarDTO atualizarAvatar(AdicionarAvatarDTO dto, Long id){
+            EntidadeAvatar entidadeAvatar = avatarRepositorio.findById(id)
+                            .orElseThrow(() -> new RuntimeException("Avatar com ID " + id + " não encontrado."));
+
             Optional.ofNullable(dto.getUrl())
                     .filter(avatar -> !avatar.isBlank() && !entidadeAvatar.getUrl().equals(dto.getUrl()))
                     .ifPresent(entidadeAvatar::setUrl);
@@ -45,9 +47,8 @@ public class AvatarService {
                     .filter(descricao -> !descricao.isBlank() && !entidadeAvatar.getDescricao().equals(dto.getDescricao()))
                     .ifPresent(entidadeAvatar::setDescricao);
 
-            return avatarRepositorio.save(entidadeAvatar);
-        }
-         throw new  RuntimeException("Não deu"); //TESTE
+            EntidadeAvatar entidadeSalva = avatarRepositorio.save(entidadeAvatar);
+            return new AvatarDTO(entidadeSalva);
 
     }
 
@@ -58,7 +59,7 @@ public class AvatarService {
                             );
 
             usuarioRepositorio.desassociarAvatar(avatarDeletar);
-            usuarioRepositorio.deleteById(id);
+            avatarRepositorio.deleteById(id); // RETIRAR AVATAR
     }
 
     public List<AvatarDTO> listarAvatars(){
