@@ -25,14 +25,14 @@ public class AvatarService {
 
     public AvatarDTO novoAvatar(AdicionarAvatarDTO dto){
 
-        boolean entidadeExistente = avatarRepositorio.existsByUrl(dto.getUrl());
+        boolean entidadeExistente = avatarRepositorio.existsByUrl(dto.url());
         if(entidadeExistente){
             throw new RuntimeException("Já existe um avatar com a URL informada!");
         }
 
         EntidadeAvatar entidadeAvatar = new EntidadeAvatar();
-        entidadeAvatar.setDescricao(dto.getDescricao());
-        entidadeAvatar.setUrl(dto.getUrl());
+        entidadeAvatar.setDescricao(dto.descricao());
+        entidadeAvatar.setUrl(dto.url());
 
         EntidadeAvatar entidadeSalva = avatarRepositorio.save(entidadeAvatar);
 
@@ -44,11 +44,11 @@ public class AvatarService {
             EntidadeAvatar entidadeAvatar = avatarRepositorio.findById(id)
                             .orElseThrow(() -> new RuntimeException("Avatar com ID " + id + " não encontrado.")); /// SUBSTITUIR POR EXCEÇÃO
 
-            Optional.ofNullable(dto.getUrl())
-                    .filter(avatar -> !avatar.isBlank() && !entidadeAvatar.getUrl().equals(dto.getUrl()))
+            Optional.ofNullable(dto.url())
+                    .filter(avatar -> !avatar.isBlank() && !entidadeAvatar.getUrl().equals(dto.descricao()))
                     .ifPresent(entidadeAvatar::setUrl);
-            Optional.ofNullable(dto.getDescricao())
-                    .filter(descricao -> !descricao.isBlank() && !entidadeAvatar.getDescricao().equals(dto.getDescricao()))
+            Optional.ofNullable(dto.descricao())
+                    .filter(descricao -> !descricao.isBlank() && !entidadeAvatar.getDescricao().equals(dto.descricao()))
                     .ifPresent(entidadeAvatar::setDescricao);
 
             EntidadeAvatar entidadeSalva = avatarRepositorio.save(entidadeAvatar);
