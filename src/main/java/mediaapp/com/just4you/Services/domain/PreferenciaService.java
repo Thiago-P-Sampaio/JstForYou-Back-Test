@@ -9,6 +9,8 @@ import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.PreferenciaRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,18 +30,18 @@ public class PreferenciaService {
     PreferenciaRepositorio preferenciaRepositorio;
 
     @Transactional
-    public CriarPreferenciaDTO  criarPreferencia(CriarPreferenciaDTO dto){
-        EntidadeUsuario entidadeExistente = usuarioRepositorio.findById(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário com ID " + dto.getUsuarioId() + " não encontrado."));
+    public PreferenciaDTO  criarPreferencia(CriarPreferenciaDTO dto){
+        EntidadeUsuario entidadeExistente = usuarioRepositorio.findById(dto.usuarioId())
+                .orElseThrow(() -> new RuntimeException("Usuário com ID " + dto.usuarioId() + " não encontrado.")); //EXCEÇÃO!!
 
         EntidadePreferencia novaPreferencia = new EntidadePreferencia();
-        Optional.ofNullable(dto.getDescricao())
+        Optional.ofNullable(dto.descricao())
                 .filter(s -> !s.isBlank())
                 .ifPresent(novaPreferencia::setDescricao);
 
         novaPreferencia.setUsuario(entidadeExistente);
          preferenciaRepositorio.save(novaPreferencia);
-         return new CriarPreferenciaDTO(novaPreferencia);
+         return new PreferenciaDTO(novaPreferencia);
 
     }
 
@@ -60,6 +62,12 @@ public class PreferenciaService {
         return preferenciasDoUsuario.stream()
                 .map(PreferenciaDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PreferenciaDTO> listasPreferenciasPaginado(Pageable pagina){
+        Page<EntidadePreferencia> entidadesPaginadas =  preferenciaRepositorio.findAll(pagina);
+        return entidadesPaginadas.map(PreferenciaDTO::new);
     }
 
 
