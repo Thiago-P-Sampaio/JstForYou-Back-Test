@@ -38,23 +38,23 @@ public class ListaConteudoService {
 
         // 1. Validar se o usuário existe. Se não, lançar uma exceção.
         EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + usuarioId));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + usuarioId)); /// EXCEÇÃO
 
         // 2. Buscar a lista do usuário.
         EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
-                .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
+                .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId)); /// EXCEÇÃO;
 
 
-        TipoMedia tipoMedia = TipoMedia.fromValue(dto.getTipoMedia());
-        EntidadeConteudos conteudo = conteudosRepositorio.findByMediaIdAndMedia(dto.getMediaId(), tipoMedia)
+        TipoMedia tipoMedia = TipoMedia.fromValue(dto.tipoMedia());
+        EntidadeConteudos conteudo = conteudosRepositorio.findByMediaIdAndMedia(dto.mediaId(), tipoMedia)
                 .orElseGet(() -> {
 
                     EntidadeConteudos novoConteudo = new EntidadeConteudos();
-                    novoConteudo.setMediaId(dto.getMediaId());
+                    novoConteudo.setMediaId(dto.mediaId());
                     novoConteudo.setMedia(tipoMedia);
 
 
-                    Optional.ofNullable(dto.getTitulo())
+                    Optional.ofNullable(dto.titulo())
                             .filter(titulo -> !titulo.isBlank())
                             .ifPresent(novoConteudo::setTitulo);
 
@@ -73,7 +73,7 @@ public class ListaConteudoService {
             novaAssociacao.setId(id);
             novaAssociacao.setLista(listaUsuario);
             novaAssociacao.setConteudo(conteudo);
-            novaAssociacao.setAvaliacao(dto.getAvaliacao());
+            novaAssociacao.setAvaliacao(dto.avaliacao());
             conteudosListaRepositorio.save(novaAssociacao);
         }
 
@@ -91,10 +91,10 @@ public class ListaConteudoService {
                 .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
 
         // 3. Buscar o conteúdo
-        TipoMedia tipoMedia = TipoMedia.fromValue(dto.getTipoMedia());
-        EntidadeConteudos conteudo = conteudosRepositorio.findByMediaIdAndMedia(dto.getMediaId(), tipoMedia)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Conteúdo não encontrado na base para o mediaId: " + dto.getMediaId() + " e tipo: " + tipoMedia
+        TipoMedia tipoMedia = TipoMedia.fromValue(dto.tipoMedia());
+        EntidadeConteudos conteudo = conteudosRepositorio.findByMediaIdAndMedia(dto.mediaId(), tipoMedia)
+                .orElseThrow(() -> new EntityNotFoundException(  /// EXCEÇÃO
+                        "Conteúdo não encontrado na base para o mediaId: " + dto.mediaId() + " e tipo: " + tipoMedia
                 ));
 
         // 4. Criar a chave composta (listaId + conteudoId)
