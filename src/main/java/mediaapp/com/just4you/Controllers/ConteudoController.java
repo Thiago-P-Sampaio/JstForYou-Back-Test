@@ -8,6 +8,8 @@ import mediaapp.com.just4you.DTOs.Response.ConteudoDTO;
 import mediaapp.com.just4you.Entities.EntidadeConteudos;
 import mediaapp.com.just4you.Services.domain.ConteudoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,7 @@ public class ConteudoController {
     // Criar conteúdo
     @PostMapping
     public ResponseEntity<ConteudoDTO> adicionarConteudo(@RequestBody @Valid CriarConteudoDTO dto) {
-        EntidadeConteudos conteudo = conteudoService.adicionarConteudo(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ConteudoDTO(conteudo));
+        return ResponseEntity.status(HttpStatus.CREATED).body(conteudoService.adicionarConteudo(dto));
     }
 
     // Deletar conteúdo
@@ -38,9 +39,9 @@ public class ConteudoController {
 
     // Listar todos os conteúdos
     @GetMapping("/all")
-    public ResponseEntity<List<ConteudoDTO>> listarConteudos() {
-        List<ConteudoDTO> conteudos = conteudoService.listarConteudos();
-        return ResponseEntity.ok(conteudos);
+    public ResponseEntity<Page<ConteudoDTO>> listarConteudos(Pageable paginacao) {
+        Page<ConteudoDTO> conteudos = conteudoService.listarConteudos(paginacao);
+        return ResponseEntity.ok().body(conteudos);
     }
 
     // Buscar conteúdo por ID interno

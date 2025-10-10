@@ -7,6 +7,8 @@ import mediaapp.com.just4you.Entities.EntidadeConteudos;
 import mediaapp.com.just4you.Entities.TipoMedia;
 import mediaapp.com.just4you.Repositories.ConteudosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -20,45 +22,44 @@ public class ConteudoService {
     @Autowired
     ConteudosRepositorio conteudosRepositorio;
 
-    public EntidadeConteudos adicionarConteudo(@RequestBody @Valid CriarConteudoDTO dto){
+    public ConteudoDTO adicionarConteudo(@RequestBody @Valid CriarConteudoDTO dto){
 
-        Optional<EntidadeConteudos> exists = conteudosRepositorio.findByMediaIdAndMedia(dto.getMediaId(), TipoMedia.fromValue(dto.getTipoMedia()));
-        if(exists.isPresent()) throw new IllegalArgumentException("Conteúdo já existe no banco!");
+        Optional<EntidadeConteudos> exists = conteudosRepositorio.findByMediaIdAndMedia(dto.mediaId(), TipoMedia.fromValue(dto.tipoMedia()));
+        if(exists.isPresent()) throw new IllegalArgumentException("Conteúdo já existe no banco!");  /// EXCEÇÃO
 
         EntidadeConteudos novoConteudo = new EntidadeConteudos();
-        Optional.ofNullable(dto.getTitulo())
+        Optional.ofNullable(dto.titulo())
                 .filter(s -> !s.isBlank())
                 .ifPresent(novoConteudo::setTitulo);
 
-        Optional.ofNullable(dto.getTipoMedia())
+        Optional.ofNullable(dto.tipoMedia())
                 .filter(s -> !s.isBlank())
                 .map(TipoMedia::fromValue)
                 .ifPresent(novoConteudo::setMedia);
 
-        novoConteudo.setMediaId(dto.getMediaId());
+        novoConteudo.setMediaId(dto.mediaId());
 
 
-        return conteudosRepositorio.save(novoConteudo);
+       EntidadeConteudos entidadeSalva = conteudosRepositorio.save(novoConteudo);
+       return new ConteudoDTO(entidadeSalva);
     }
 
     public void deletarConteudo(Long id){
         EntidadeConteudos conteudoExistente = conteudosRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Filme não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Conteúdo não encontrado"));  /// EXCEÇÃO
 
         conteudosRepositorio.deleteById(id);
 
     }
-    public List<ConteudoDTO> listarConteudos(){
-        return conteudosRepositorio.findAll()
-                .stream()
-                .map(ConteudoDTO::new) // Forma curta de: .map(entidade -> new ConteudoDTO(entidade))
-                .collect(Collectors.toList());
+    public Page<ConteudoDTO> listarConteudos(Pageable paginacao){
+        Page<EntidadeConteudos> conteudos = conteudosRepositorio.findAll(paginacao);
+        return conteudos.map(ConteudoDTO::new);
     }
 
 
     public ConteudoDTO buscarConteudoPorId(Long id){
         EntidadeConteudos conteudo = conteudosRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Conteúdo não encontrado com ID: " + id ));
+                .orElseThrow(() -> new RuntimeException("Conteúdo não encontrado com ID: " + id ));  /// EXCEÇÃO
 
         return new ConteudoDTO(conteudo);
     }
@@ -69,7 +70,7 @@ public class ConteudoService {
 
         return conteudoOptional
                 .map(ConteudoDTO::new)
-                .orElseGet(ConteudoDTO::new);
+                .orElseThrow(() -> new  RuntimeException("Conteúdo não encontrado")); /// EXCEÇÃO
     }
 
 
