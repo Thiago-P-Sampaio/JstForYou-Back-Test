@@ -40,7 +40,8 @@ public class AutenticacaoService {
         var auth = this.authenticationManager.authenticate(credenciaisUsuario);
         EntidadeUsuario usuario = (EntidadeUsuario) auth.getPrincipal();
         var token = tokenService.gerarToken((EntidadeUsuario) auth.getPrincipal());
-        return new RespostaLoginDTO(token, usuario.getNome(), usuario.getUsuarioId() );
+        String avatarUrl = (usuario.getAvatar() != null) ? usuario.getAvatar().getUrl() : null;
+        return new RespostaLoginDTO(token, usuario.getNome(), usuario.getUsuarioId(), avatarUrl );
 
     }
 
