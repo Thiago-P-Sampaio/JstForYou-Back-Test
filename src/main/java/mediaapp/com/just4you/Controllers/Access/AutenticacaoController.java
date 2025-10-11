@@ -1,7 +1,6 @@
 package mediaapp.com.just4you.Controllers.Access;
 
 import jakarta.validation.Valid;
-import mediaapp.com.just4you.DTOs.Create.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Security.AuntenticacaoDTO;
 import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
 import mediaapp.com.just4you.Services.SecurityServices.AutenticacaoService;

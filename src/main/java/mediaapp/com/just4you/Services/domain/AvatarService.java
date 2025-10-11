@@ -1,6 +1,7 @@
 package mediaapp.com.just4you.Services.domain;
 
 import mediaapp.com.just4you.DTOs.Create.AdicionarAvatarDTO;
+import mediaapp.com.just4you.DTOs.Put.EditarAvatar;
 import mediaapp.com.just4you.DTOs.Response.AvatarDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
@@ -40,7 +41,7 @@ public class AvatarService {
     }
 
 
-    public AvatarDTO atualizarAvatar(AdicionarAvatarDTO dto, Long id){
+    public AvatarDTO atualizarAvatar(EditarAvatar dto, Long id){
             EntidadeAvatar entidadeAvatar = avatarRepositorio.findById(id)
                             .orElseThrow(() -> new RuntimeException("Avatar com ID " + id + " não encontrado.")); /// SUBSTITUIR POR EXCEÇÃO
 

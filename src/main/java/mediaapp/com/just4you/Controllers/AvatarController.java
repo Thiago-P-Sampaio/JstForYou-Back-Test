@@ -1,6 +1,7 @@
 package mediaapp.com.just4you.Controllers;
 
 import mediaapp.com.just4you.DTOs.Create.AdicionarAvatarDTO;
+import mediaapp.com.just4you.DTOs.Put.EditarAvatar;
 import mediaapp.com.just4you.DTOs.Response.AvatarDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Services.domain.AvatarService;
@@ -25,7 +26,7 @@ public class AvatarController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<AvatarDTO> editarAvatar(@PathVariable Long id, @RequestBody AdicionarAvatarDTO dto) {
+    public ResponseEntity<AvatarDTO> editarAvatar(@PathVariable Long id, @RequestBody EditarAvatar dto) {
         return ResponseEntity.ok().body(avatarService.atualizarAvatar(dto, id));
     }
 

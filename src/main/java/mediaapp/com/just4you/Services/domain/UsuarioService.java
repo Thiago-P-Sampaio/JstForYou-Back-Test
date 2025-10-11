@@ -1,10 +1,8 @@
 package mediaapp.com.just4you.Services.domain;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-import mediaapp.com.just4you.DTOs.Create.EditarUsuario;
+import mediaapp.com.just4you.DTOs.Put.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
-import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
@@ -17,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
