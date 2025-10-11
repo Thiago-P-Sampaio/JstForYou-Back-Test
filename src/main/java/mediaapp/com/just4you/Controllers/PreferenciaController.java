@@ -3,10 +3,13 @@ package mediaapp.com.just4you.Controllers;
 
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Create.CriarPreferenciaDTO;
+import mediaapp.com.just4you.DTOs.Put.EditarPreferencia;
 import mediaapp.com.just4you.DTOs.Response.PreferenciaDTO;
 import mediaapp.com.just4you.Entities.EntidadePreferencia;
 import mediaapp.com.just4you.Services.domain.PreferenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +40,21 @@ public class PreferenciaController {
     public ResponseEntity<List<PreferenciaDTO>> buscarPreferenciasPorUsuario(@PathVariable Long usuarioId) {
         List<PreferenciaDTO> preferencias = preferenciaService.buscarPreferenciasPorUsuario(usuarioId);
         return ResponseEntity.ok(preferencias);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<PreferenciaDTO>> listarPreferencias(Pageable paginacao) {
+        Page<PreferenciaDTO> preferencias = preferenciaService.listasPreferenciasPaginado(paginacao);
+        return ResponseEntity.ok(preferencias);
+    }
+
+    @PutMapping("/edit/{id}/{usuarioId}")
+    public ResponseEntity<PreferenciaDTO> atualizarPreferencia(
+            @PathVariable Long id,
+            @PathVariable Long usuarioId,
+            @RequestBody EditarPreferencia dto
+    ){
+        return ResponseEntity.ok(preferenciaService.editarPreferencia(dto, id, usuarioId));
     }
 
 

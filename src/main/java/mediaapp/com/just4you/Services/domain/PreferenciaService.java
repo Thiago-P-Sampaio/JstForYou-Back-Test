@@ -3,6 +3,7 @@ package mediaapp.com.just4you.Services.domain;
 
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Create.CriarPreferenciaDTO;
+import mediaapp.com.just4you.DTOs.Put.EditarPreferencia;
 import mediaapp.com.just4you.DTOs.Response.PreferenciaDTO;
 import mediaapp.com.just4you.Entities.EntidadePreferencia;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
@@ -68,6 +69,25 @@ public class PreferenciaService {
     public Page<PreferenciaDTO> listasPreferenciasPaginado(Pageable pagina){
         Page<EntidadePreferencia> entidadesPaginadas =  preferenciaRepositorio.findAll(pagina);
         return entidadesPaginadas.map(PreferenciaDTO::new);
+    }
+
+    public PreferenciaDTO editarPreferencia(EditarPreferencia dto, Long id, Long usuarioId){
+        EntidadePreferencia preferencia = preferenciaRepositorio.findById(id)
+                .orElseThrow(() -> new RuntimeException("Preferência com ID: "+ id + " Não encontrado!"));
+
+        if(!preferencia.getUsuario().getUsuarioId().equals(usuarioId)){
+            throw new RuntimeException("Preferência não pertence ao usuário");
+        }
+
+        Optional.of(dto.descricao())
+                .filter(s -> !s.isBlank())
+                .ifPresent(preferencia::setDescricao);
+
+        EntidadePreferencia entidadeSalva = preferenciaRepositorio.save(preferencia);
+        return new PreferenciaDTO(entidadeSalva);
+
+
+
     }
 
 
