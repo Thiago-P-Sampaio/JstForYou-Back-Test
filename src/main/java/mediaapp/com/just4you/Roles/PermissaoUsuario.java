@@ -2,7 +2,8 @@ package mediaapp.com.just4you.Roles;
 
 public enum PermissaoUsuario {
 
-    USER("user");
+    USER("user"),
+    ADMIN("admin");
 
     private String role;
 

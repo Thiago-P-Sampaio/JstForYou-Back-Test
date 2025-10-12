@@ -36,6 +36,8 @@ public class ConfiguracoesSeguranca implements WebMvcConfigurer {
 //                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
 //                         .requestMatchers(HttpMethod.GET, "/user/buscar/{id}").hasRole("USER")
 //                         .requestMatchers(HttpMethod.GET, "/user/buscar").hasRole("USER")
+                                 .requestMatchers(HttpMethod.GET, "/api/jfy/user/all").hasRole("ADMIN")
+                                 .requestMatchers(HttpMethod.GET, "/swagger**/**").hasRole("ADMIN")
                                  .anyRequest().permitAll() // Liberando as ROTAS TEMPORÁRIAMENTE
                  )
 

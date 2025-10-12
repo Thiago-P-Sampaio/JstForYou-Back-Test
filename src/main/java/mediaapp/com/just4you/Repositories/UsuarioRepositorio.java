@@ -2,6 +2,7 @@ package mediaapp.com.just4you.Repositories;
 
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
+import mediaapp.com.just4you.Roles.PermissaoUsuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +21,5 @@ public interface UsuarioRepositorio extends JpaRepository<EntidadeUsuario, Long>
     void desassociarAvatar(@Param("avatar")EntidadeAvatar avatar);
 
 
-    @Modifying
-    @Query("UPDATE EntidadeUsuario u SET u.avatar = NULL WHERE u.usuarioId = :usuario")
-    void dessasociarUsuarioAvatar(@Param("usuario") EntidadeUsuario usuario);
+    boolean existsByRole(PermissaoUsuario role);
 }

@@ -34,6 +34,7 @@ public class EntidadeUsuario implements UserDetails {
     @Column(updatable = false, nullable = false)
     private Instant dataCadastro;
 
+    @Enumerated(EnumType.STRING)
     private PermissaoUsuario role;
 
     //Relacionamentos
@@ -151,7 +152,16 @@ public class EntidadeUsuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.role == PermissaoUsuario.ADMIN) {
+            // Se a role for ADMIN, retorna uma lista com ROLE_ADMIN e ROLE_USER (opcional)
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
+        } else {
+            // Para qualquer outra role, retorna apenas ROLE_USER
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
     }
 
     @Override
