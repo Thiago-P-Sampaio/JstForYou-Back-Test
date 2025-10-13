@@ -7,6 +7,7 @@ import mediaapp.com.just4you.DTOs.Put.EditarPreferencia;
 import mediaapp.com.just4you.DTOs.Response.PreferenciaDTO;
 import mediaapp.com.just4you.Entities.EntidadePreferencia;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
+import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcessao;
 import mediaapp.com.just4you.Repositories.PreferenciaRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class PreferenciaService {
     @Transactional
     public PreferenciaDTO  criarPreferencia(CriarPreferenciaDTO dto){
         EntidadeUsuario entidadeExistente = usuarioRepositorio.findById(dto.usuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário com ID " + dto.usuarioId() + " não encontrado.")); //EXCEÇÃO!!
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Usuário com ID " + dto.usuarioId() + " não encontrado.")); //EXCEÇÃO!!
 
         EntidadePreferencia novaPreferencia = new EntidadePreferencia();
         Optional.ofNullable(dto.descricao())
@@ -49,7 +50,7 @@ public class PreferenciaService {
     @Transactional
     public void deletarPreferencia(Long id){
         EntidadePreferencia preferenciaExistente = preferenciaRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Preferencia com id: " + id + " não encontrado!"));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Preferencia com id: " + id + " não encontrado!"));
 
         preferenciaRepositorio.deleteById(id);
     }
@@ -57,7 +58,7 @@ public class PreferenciaService {
     @Transactional(readOnly = true)
     public List<PreferenciaDTO> buscarPreferenciasPorUsuario(Long id){
         if (!usuarioRepositorio.existsById(id)) {
-            throw new RuntimeException("Usuário com ID " + id + " não encontrado.");
+            throw new RecursoNaoEncontradoExcessao("Usuário com ID " + id + " não encontrado.");
         }
         List<EntidadePreferencia> preferenciasDoUsuario = preferenciaRepositorio.findByUsuario_UsuarioId(id);
         return preferenciasDoUsuario.stream()
@@ -76,7 +77,7 @@ public class PreferenciaService {
                 .orElseThrow(() -> new RuntimeException("Preferência com ID: "+ id + " Não encontrado!"));
 
         if(!preferencia.getUsuario().getUsuarioId().equals(usuarioId)){
-            throw new RuntimeException("Preferência não pertence ao usuário");
+            throw new RuntimeException("Preferência não pertence ao usuário");  ///TRATAR EXCEÇÃO!
         }
 
         Optional.of(dto.descricao())

@@ -7,6 +7,7 @@ import mediaapp.com.just4you.DTOs.Create.ConteudoParaListaDTO;
 import mediaapp.com.just4you.DTOs.Create.CriarConteudoDTO;
 import mediaapp.com.just4you.DTOs.Response.ListaUsuarioDTO;
 import mediaapp.com.just4you.Entities.*;
+import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcessao;
 import mediaapp.com.just4you.Repositories.ConteudosListaRepositorio;
 import mediaapp.com.just4you.Repositories.ConteudosRepositorio;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
@@ -38,11 +39,11 @@ public class ListaConteudoService {
 
         // 1. Validar se o usuário existe. Se não, lançar uma exceção.
         EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + usuarioId)); /// EXCEÇÃO
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Usuário não encontrado com o ID: " + usuarioId)); /// EXCEÇÃO
 
         // 2. Buscar a lista do usuário.
         EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
-                .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId)); /// EXCEÇÃO;
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Lista não encontrada para o usuário com ID: " + usuarioId)); /// EXCEÇÃO;
 
 
         TipoMedia tipoMedia = TipoMedia.fromValue(dto.tipoMedia());
@@ -84,16 +85,16 @@ public class ListaConteudoService {
 
         // 1. Validar se o usuário existe
         EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + usuarioId));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Usuário não encontrado com o ID: " + usuarioId));
 
         // 2. Buscar a lista do usuário
         EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
-                .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Lista não encontrada para o usuário com ID: " + usuarioId));
 
         // 3. Buscar o conteúdo
         TipoMedia tipoMedia = TipoMedia.fromValue(dto.tipoMedia());
         EntidadeConteudos conteudo = conteudosRepositorio.findByMediaIdAndMedia(dto.mediaId(), tipoMedia)
-                .orElseThrow(() -> new EntityNotFoundException(  /// EXCEÇÃO
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao(  /// EXCEÇÃO
                         "Conteúdo não encontrado na base para o mediaId: " + dto.mediaId() + " e tipo: " + tipoMedia
                 ));
 
@@ -103,7 +104,7 @@ public class ListaConteudoService {
         // 5. Verificar se a associação existe
         boolean associacaoExiste = conteudosListaRepositorio.existsById(id);
         if (!associacaoExiste) {
-            throw new EntityNotFoundException("O conteúdo não está presente na lista do usuário.");
+            throw new EntityNotFoundException("O conteúdo não está presente na lista do usuário."); ///  VERIFICAR
         }
 
         // 6. Remover associação
@@ -114,11 +115,11 @@ public class ListaConteudoService {
     public ListaUsuarioDTO buscarListaPorUsuario(Long usuarioId) {
         // 1. Validar se o usuário existe
         EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + usuarioId));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Usuário não encontrado com ID: " + usuarioId));
 
         // 2. Buscar a lista do usuário
         EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
-                .orElseThrow(() -> new EntityNotFoundException("Lista não encontrada para o usuário com ID: " + usuarioId));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Lista não encontrada para o usuário com ID: " + usuarioId));
 
         // 3. Retornar DTO
         return new ListaUsuarioDTO(listaUsuario);

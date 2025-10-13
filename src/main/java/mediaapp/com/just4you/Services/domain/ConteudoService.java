@@ -5,6 +5,7 @@ import mediaapp.com.just4you.DTOs.Create.CriarConteudoDTO;
 import mediaapp.com.just4you.DTOs.Response.ConteudoDTO;
 import mediaapp.com.just4you.Entities.EntidadeConteudos;
 import mediaapp.com.just4you.Entities.TipoMedia;
+import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcessao;
 import mediaapp.com.just4you.Repositories.ConteudosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,7 +47,7 @@ public class ConteudoService {
 
     public void deletarConteudo(Long id){
         EntidadeConteudos conteudoExistente = conteudosRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Conteúdo não encontrado"));  /// EXCEÇÃO
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Conteúdo com ID: " + id + " não encontrado!"));  /// EXCEÇÃO
 
         conteudosRepositorio.deleteById(id);
 
@@ -59,7 +60,7 @@ public class ConteudoService {
 
     public ConteudoDTO buscarConteudoPorId(Long id){
         EntidadeConteudos conteudo = conteudosRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Conteúdo não encontrado com ID: " + id ));  /// EXCEÇÃO
+                .orElseThrow(() ->  new RecursoNaoEncontradoExcessao("Conteúdo com ID: " + id + " não encontrado!"));  /// EXCEÇÃO
 
         return new ConteudoDTO(conteudo);
     }
@@ -70,7 +71,7 @@ public class ConteudoService {
 
         return conteudoOptional
                 .map(ConteudoDTO::new)
-                .orElseThrow(() -> new  RuntimeException("Conteúdo não encontrado")); /// EXCEÇÃO
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Conteudo(" + media +") e ID: " + mediaId + " não encontrado!")); /// EXCEÇÃO
     }
 
 

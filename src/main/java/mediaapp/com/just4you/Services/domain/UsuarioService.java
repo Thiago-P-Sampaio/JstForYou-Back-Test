@@ -5,6 +5,7 @@ import mediaapp.com.just4you.DTOs.Put.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
+import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcessao;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
@@ -33,7 +34,7 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public UsuarioDTO buscarUsuarioPorId(Long id){
         EntidadeUsuario usuario = usuarioRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Usuário com ID: " + id + " não encontrado!"));
 
 
         return new UsuarioDTO(usuario);
@@ -41,7 +42,7 @@ public class UsuarioService {
 
     public void deletarUsuario(Long id){
         EntidadeUsuario usuario = usuarioRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID")); // EXCEÇÃO!
+                .orElseThrow(() ->  new RecursoNaoEncontradoExcessao("Usuário com ID: " + id + " não encontrado!")); // EXCEÇÃO!
 
 
         usuarioRepositorio.delete(usuario);
@@ -58,7 +59,7 @@ public class UsuarioService {
     public UsuarioDTO alterarDadosUsuario(EditarUsuario dados, Long id) {
 
         EntidadeUsuario editarUsuario = usuarioRepositorio.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Usuário com ID: " + id + " Não encontrado"));
+                        .orElseThrow(() ->  new RecursoNaoEncontradoExcessao("Usuário com ID: " + id + " não encontrado!"));
 
         // Atualiza nome se for diferente
         Optional.ofNullable(dados.nome())
