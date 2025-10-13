@@ -30,7 +30,7 @@ public class ManipuladorGlobalExcessoes {
         );
         return ResponseEntity.status(status).body(resposta);
     }
-
+        /// ERROS DE VALIDAÇÃO EM DTOs!
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidacaoErroRespota> validacaoIlegal(MethodArgumentNotValidException exc, HttpServletRequest requisicao){
         HttpStatus status = HttpStatus.BAD_REQUEST;
