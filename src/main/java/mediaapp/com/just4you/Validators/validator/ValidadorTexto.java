@@ -8,7 +8,7 @@ public class ValidadorTexto implements ConstraintValidator<Texto, String> {
 
     @Override
     public boolean isValid(String valor, ConstraintValidatorContext context) {
-        if (valor == null) {
+        if (valor == null || valor == "") {
             return true;
         }
         return valor.matches("^[a-zA-ZÀ-ú\\s]+$");

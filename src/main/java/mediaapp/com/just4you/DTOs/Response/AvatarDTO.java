@@ -15,7 +15,7 @@ public record AvatarDTO(
         this(
                 entity.getId(),
                 entity.getUrl(),
-                entity.getUrl()
+                entity.getDescricao()
         );
     }
     

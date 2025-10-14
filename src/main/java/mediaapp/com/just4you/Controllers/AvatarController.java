@@ -1,5 +1,6 @@
 package mediaapp.com.just4you.Controllers;
 
+import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Create.AdicionarAvatarDTO;
 import mediaapp.com.just4you.DTOs.Put.EditarAvatar;
 import mediaapp.com.just4you.DTOs.Response.AvatarDTO;
@@ -21,7 +22,7 @@ public class AvatarController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<AvatarDTO> adicionarAvatar(@RequestBody AdicionarAvatarDTO dto) {
+    public ResponseEntity<AvatarDTO> adicionarAvatar(@RequestBody   AdicionarAvatarDTO dto) {
         return ResponseEntity.ok().body(avatarService.novoAvatar(dto));
     }
 
