@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Create.CriarConteudoDTO;
+import mediaapp.com.just4you.DTOs.Put.EditarConteudo;
 import mediaapp.com.just4you.DTOs.Response.ConteudoDTO;
 import mediaapp.com.just4you.Entities.EntidadeConteudos;
 import mediaapp.com.just4you.Services.domain.ConteudoService;
@@ -59,6 +60,11 @@ public class ConteudoController {
             @RequestParam String tipoMedia) {
         ConteudoDTO conteudo = conteudoService.buscarPorMediaComId(mediaId, tipoMedia);
         return ResponseEntity.ok(conteudo);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<ConteudoDTO> editarConteudo(@PathVariable Long id, @RequestBody @Valid EditarConteudo dto) {
+        return ResponseEntity.ok().body(conteudoService.editarConteudo(dto, id));
     }
 
     }

@@ -2,7 +2,9 @@ package mediaapp.com.just4you.Services.domain;
 
 import jakarta.validation.Valid;
 import mediaapp.com.just4you.DTOs.Create.CriarConteudoDTO;
+import mediaapp.com.just4you.DTOs.Put.EditarConteudo;
 import mediaapp.com.just4you.DTOs.Response.ConteudoDTO;
+import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Entities.EntidadeConteudos;
 import mediaapp.com.just4you.Entities.TipoMedia;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcessao;
@@ -72,6 +74,28 @@ public class ConteudoService {
         return conteudoOptional
                 .map(ConteudoDTO::new)
                 .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Conteudo(" + media +") e ID: " + mediaId + " não encontrado!")); /// EXCEÇÃO
+    }
+
+
+    public ConteudoDTO editarConteudo(EditarConteudo dto, Long id){
+        EntidadeConteudos conteudo = conteudosRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Conteúdo com ID: " + id + " não encontrado"));
+
+        Optional.ofNullable(dto.titulo())
+                .filter(s -> !s.isBlank() || !dto.titulo().equals(conteudo.getTitulo()))
+                .ifPresent(conteudo::setTitulo);
+
+        Optional.ofNullable(dto.mediaId())
+                .filter(s -> !s.equals(conteudo.getMediaId()))
+                .ifPresent(conteudo::setMediaId);
+
+        Optional.ofNullable(dto.mediaTipo())
+                .filter(s -> !s.isBlank() || !s.equals(conteudo.getMedia()))
+                .map(TipoMedia::fromValue)
+                .ifPresent(conteudo::setMedia);
+
+        EntidadeConteudos entidadeSalva = conteudosRepositorio.save(conteudo);
+        return new ConteudoDTO(entidadeSalva);
     }
 
 
