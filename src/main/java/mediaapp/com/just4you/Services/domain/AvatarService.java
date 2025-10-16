@@ -8,6 +8,8 @@ import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcessao;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +75,12 @@ public class AvatarService {
         return avatares.stream()
                 .map(AvatarDTO::new)
                 .toList();
+    }
+
+
+    public Page<AvatarDTO> listarAvataresPaginacao(Pageable paginacao){
+        Page<EntidadeAvatar> avatares = avatarRepositorio.findAll(paginacao);
+        return avatares.map(AvatarDTO::new);
     }
 
     public AvatarDTO buscarAvatarPorId(Long id){

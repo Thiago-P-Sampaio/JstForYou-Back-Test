@@ -8,6 +8,8 @@ import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Services.domain.AvatarService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +24,12 @@ public class AvatarController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<AvatarDTO> adicionarAvatar(@RequestBody   AdicionarAvatarDTO dto) {
+    public ResponseEntity<AvatarDTO> adicionarAvatar(@RequestBody @Valid  AdicionarAvatarDTO dto) {
         return ResponseEntity.ok().body(avatarService.novoAvatar(dto));
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<AvatarDTO> editarAvatar(@PathVariable Long id, @RequestBody EditarAvatar dto) {
+    public ResponseEntity<AvatarDTO> editarAvatar(@PathVariable Long id, @RequestBody @Valid EditarAvatar dto) {
         return ResponseEntity.ok().body(avatarService.atualizarAvatar(dto, id));
     }
 
@@ -45,5 +47,11 @@ public class AvatarController {
     @GetMapping("/get/all")
     public ResponseEntity<List<AvatarDTO>> buscarAvatares(){
         return ResponseEntity.ok().body(avatarService.listarAvatars());
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Page<AvatarDTO>> listarAvataresPaginacao(Pageable paginacao){
+        Page<AvatarDTO> avataresPagina = avatarService.listarAvataresPaginacao(paginacao);
+        return ResponseEntity.ok().body(avataresPagina);
     }
 }
