@@ -4,7 +4,7 @@ import mediaapp.com.just4you.DTOs.Create.AdicionarAvatarDTO;
 import mediaapp.com.just4you.DTOs.Put.EditarAvatar;
 import mediaapp.com.just4you.DTOs.Response.AvatarDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
-import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcessao;
+import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class AvatarService {
 
     public AvatarDTO atualizarAvatar(EditarAvatar dto, Long id){
             EntidadeAvatar entidadeAvatar = avatarRepositorio.findById(id)
-                            .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Avatar com ID: " + id + " não encontrado."));
+                            .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Avatar com ID: " + id + " não encontrado."));
 
             Optional.ofNullable(dto.url())
                     .filter(avatar -> !avatar.isBlank() && !entidadeAvatar.getUrl().equals(dto.descricao()))
@@ -63,7 +63,7 @@ public class AvatarService {
     @Transactional
     public void deletarAvatar(Long id){
             EntidadeAvatar avatarDeletar = avatarRepositorio.findById(id)
-                    .orElseThrow(() ->  new RecursoNaoEncontradoExcessao("Avatar com ID: " + id + " Não encontrado" )
+                    .orElseThrow(() ->  new RecursoNaoEncontradoExcecao("Avatar com ID: " + id + " Não encontrado" )
                             );
 
             usuarioRepositorio.desassociarAvatar(avatarDeletar);
@@ -86,7 +86,7 @@ public class AvatarService {
     public AvatarDTO buscarAvatarPorId(Long id){
        return avatarRepositorio.findById(id)
                 .map(AvatarDTO::new)
-                .orElseThrow(() -> new RecursoNaoEncontradoExcessao("Avatar com ID: " + id + " não encontrado."));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Avatar com ID: " + id + " não encontrado."));
     }
 
 }

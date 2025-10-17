@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class ManipuladorGlobalExcessoes {
+public class ManipuladorGlobalExcecoes {
 
-    @ExceptionHandler(RecursoNaoEncontradoExcessao.class)
-    public ResponseEntity<ErroResposta> recursoNaoEncontrado(RecursoNaoEncontradoExcessao exc, HttpServletRequest requisicao){
+    @ExceptionHandler(RecursoNaoEncontradoExcecao.class)
+    public ResponseEntity<ErroResposta> recursoNaoEncontrado(RecursoNaoEncontradoExcecao exc, HttpServletRequest requisicao){
         HttpStatus status = HttpStatus.NOT_FOUND;
         ErroResposta resposta = new ErroResposta(
                 Instant.now(),
