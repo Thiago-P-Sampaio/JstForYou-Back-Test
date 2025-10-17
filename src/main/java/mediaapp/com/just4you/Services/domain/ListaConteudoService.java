@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import mediaapp.com.just4you.DTOs.Create.ConteudoParaListaDTO;
 import mediaapp.com.just4you.DTOs.Response.ListaUsuarioDTO;
 import mediaapp.com.just4you.Entities.*;
+import mediaapp.com.just4you.Exceptions.RecursoExistenteExcecao;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.ConteudosListaRepositorio;
 import mediaapp.com.just4you.Repositories.ConteudosRepositorio;
@@ -73,6 +74,8 @@ public class ListaConteudoService {
             novaAssociacao.setConteudo(conteudo);
             novaAssociacao.setAvaliacao(dto.avaliacao());
             conteudosListaRepositorio.save(novaAssociacao);
+        } else {
+            new RecursoExistenteExcecao(" Já existe o conteúdo com ID: " + dto.mediaId() + " na lista com ID: " + listaUsuario.getListaId());
         }
 
     }

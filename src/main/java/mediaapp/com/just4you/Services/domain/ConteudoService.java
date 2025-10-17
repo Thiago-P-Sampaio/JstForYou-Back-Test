@@ -6,6 +6,7 @@ import mediaapp.com.just4you.DTOs.Put.EditarConteudo;
 import mediaapp.com.just4you.DTOs.Response.ConteudoDTO;
 import mediaapp.com.just4you.Entities.EntidadeConteudos;
 import mediaapp.com.just4you.Entities.TipoMedia;
+import mediaapp.com.just4you.Exceptions.RecursoExistenteExcecao;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.ConteudosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ConteudoService {
     public ConteudoDTO adicionarConteudo(@RequestBody @Valid CriarConteudoDTO dto){
 
         Optional<EntidadeConteudos> exists = conteudosRepositorio.findByMediaIdAndMedia(dto.mediaId(), TipoMedia.fromValue(dto.tipoMedia()));
-        if(exists.isPresent()) throw new IllegalArgumentException("Conteúdo já existe no banco!");  /// EXCEÇÃO
+        if(exists.isPresent()) throw new RecursoExistenteExcecao("Conteúdo com ID(midia): " + dto.mediaId() + " e mídia: " + dto.tipoMedia() + " já existe!");  /// EXCEÇÃO
 
         EntidadeConteudos novoConteudo = new EntidadeConteudos();
         Optional.ofNullable(dto.titulo())

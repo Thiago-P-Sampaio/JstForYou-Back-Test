@@ -68,6 +68,20 @@ public class ManipuladorGlobalExcecoes {
         return ResponseEntity.status(status).body(resposta);
     }
 
+    @ExceptionHandler(RecursoExistenteExcecao.class)
+    public ResponseEntity<ErroResposta> recursoExistente( RecursoExistenteExcecao exc,HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.CONFLICT;
+        ErroResposta resposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Conteúdo existente",
+                exc.getMessage(),
+                requisicao.getRequestURI()
+
+        );
+        return ResponseEntity.status(status).body(resposta);
+    }
+
 
 
 }

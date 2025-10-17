@@ -4,6 +4,7 @@ import mediaapp.com.just4you.DTOs.Create.AdicionarAvatarDTO;
 import mediaapp.com.just4you.DTOs.Put.EditarAvatar;
 import mediaapp.com.just4you.DTOs.Response.AvatarDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
+import mediaapp.com.just4you.Exceptions.RecursoExistenteExcecao;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
@@ -31,7 +32,7 @@ public class AvatarService {
 
         boolean entidadeExistente = avatarRepositorio.existsByUrl(dto.url());
         if(entidadeExistente){
-            throw new RuntimeException("Já existe um avatar com a URL informada!");
+            throw new RecursoExistenteExcecao("Já existe um avatar com a URL informada!");
         }
 
         EntidadeAvatar entidadeAvatar = new EntidadeAvatar();

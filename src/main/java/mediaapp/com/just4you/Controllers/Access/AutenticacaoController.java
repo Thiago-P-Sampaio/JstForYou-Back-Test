@@ -26,9 +26,9 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity cadastrar(@RequestBody @Valid CadastrarDTO dados) {
-        if (autenticacaoService.cadastrar(dados)) return ResponseEntity.status(HttpStatus.CREATED).body("Cadastrado com sucesso");
-        else  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não pode ser cadastrado, tente novamente!");
+    public ResponseEntity<?> cadastrar(@RequestBody @Valid CadastrarDTO dados) {
+        autenticacaoService.cadastrar(dados);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

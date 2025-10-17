@@ -6,6 +6,7 @@ import mediaapp.com.just4you.DTOs.UserAcess.CadastrarDTO;
 import mediaapp.com.just4you.DTOs.UserAcess.RespostaLoginDTO;
 import mediaapp.com.just4you.Entities.EntidadeListaUsuario;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
+import mediaapp.com.just4you.Exceptions.RecursoExistenteExcecao;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import mediaapp.com.just4you.Roles.PermissaoUsuario;
@@ -45,8 +46,10 @@ public class AutenticacaoService {
 
     }
 
-    public boolean cadastrar(@RequestBody @Valid CadastrarDTO dados){
-        if(this.usuarioRepositorio.findByEmail(dados.email()) != null) return false;
+    public void cadastrar(@RequestBody @Valid CadastrarDTO dados){
+        if(this.usuarioRepositorio.findByEmail(dados.email()) != null){
+            throw new  RecursoExistenteExcecao("Não foi possível criar o usuário");
+        }
         String senhaCriptografada = new BCryptPasswordEncoder().encode(dados.senha());
         EntidadeUsuario usuario = new EntidadeUsuario();
         usuario.setDataCadastro(Instant.now());
@@ -64,7 +67,6 @@ public class AutenticacaoService {
         listaUsuarioRepositorio.save(listaUsuario);
 
 
-        return true;
     }
 
 

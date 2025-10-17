@@ -80,13 +80,13 @@ public class UsuarioService {
 
         Optional.ofNullable(dados.avatar_id()).ifPresent(avatarId -> {
             try {
-                // Busca uma REFERÊNCIA para o avatar. É mais eficiente que findById().
+
                 EntidadeAvatar avatar = avatarRepositorio.getReferenceById(avatarId);
                 // Associa a referência da entidade encontrada ao usuário.
                 editarUsuario.setAvatar(avatar);
             } catch (EntityNotFoundException e) {
                 // Se o avatar_id fornecido não existe no banco, a requisição é inválida.
-                throw new RuntimeException("Avatar com ID " + avatarId + " não encontrado.");
+                throw new RecursoNaoEncontradoExcecao("Avatar com ID " + avatarId + " não encontrado.");
             }
         });
 
