@@ -4,8 +4,10 @@ import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Entities.RedefinirSenhaToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface RedefinirSenhaTokenRepositorio extends JpaRepository<RedefinirSenhaToken, Long> {
 
     RedefinirSenhaToken findByToken(String token);
-    void deleteByUsuarioId(Long usuario_id);
+    Optional<RedefinirSenhaToken> findByUsuario(EntidadeUsuario usuario);
 }

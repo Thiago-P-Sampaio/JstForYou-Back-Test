@@ -43,7 +43,7 @@ public class AutenticacaoController {
             redefinirSenhaService.criarTokenRedefinicao(dados.email());
             return ResponseEntity.ok("Se um e-mail cadastrado for encontrado, um link de redefinição será enviado.");
         } catch (Exception e) {
-            return ResponseEntity.ok("não deu");
+            return ResponseEntity.ok("Se um e-mail cadastrado for encontrado, um link de redefinição será enviado.");
         }
     }
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,18 +37,23 @@ public class RedefinicaoSenhaService {
                 .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Email não encontrado!"));
 
         if(usuario != null){
-            System.out.println("CHEGO AQUI!");
-            tokenRepositorio.deleteByUsuarioId(usuario.getUsuarioId());
-            System.out.println("DELEÇÃO DE TOKEN!");
+
             String token = UUID.randomUUID().toString();
             System.out.println("Criação do token: " + token);
             LocalDateTime exp = LocalDateTime.now().plusMinutes(10);
 
-            RedefinirSenhaToken redefinirToken = new RedefinirSenhaToken(token, usuario, exp);
+            RedefinirSenhaToken redefinirToken = tokenRepositorio.findByUsuario(usuario)
+                            .orElse(new RedefinirSenhaToken());
+
+            redefinirToken.setToken(token);
+            redefinirToken.setExpiracao(exp);
+            redefinirToken.setUsuario(usuario);
+
             tokenRepositorio.save(redefinirToken);
+
             System.out.println("SALVO: " + token);
 
-            emailService.enviarEmail(email, token);
+            emailService.enviarEmail(email, token, usuario.getNome());
         }
 
     }
@@ -55,11 +61,8 @@ public class RedefinicaoSenhaService {
 
     public void redefinirSenha(RedefinirSenha dto){
         RedefinirSenhaToken redefinirToken = tokenRepositorio.findByToken(dto.token());
-        if(redefinirToken != null){
-            throw new RuntimeException("Token inválido");
-        }
-        if(redefinirToken.Expirado()){
-            throw new RuntimeException("Token expirado");
+        if(redefinirToken == null || redefinirToken.Expirado()){
+            throw new RuntimeException("Token inválido ou expirado!");
         }
 
         EntidadeUsuario usuario = redefinirToken.getUsuario();

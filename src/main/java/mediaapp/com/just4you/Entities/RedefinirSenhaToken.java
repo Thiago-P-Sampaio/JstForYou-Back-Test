@@ -40,7 +40,7 @@ public class RedefinirSenhaToken {
     }
 
     public boolean Expirado(){
-        return expiracao.isAfter(LocalDateTime.now());
+        return LocalDateTime.now().isAfter(this.expiracao);
     }
 
     public Long getId() {
