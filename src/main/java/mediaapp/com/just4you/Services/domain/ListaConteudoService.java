@@ -104,7 +104,7 @@ public class ListaConteudoService {
         // 5. Verificar se a associação existe
         boolean associacaoExiste = conteudosListaRepositorio.existsById(id);
         if (!associacaoExiste) {
-            throw new EntityNotFoundException("O conteúdo não está presente na lista do usuário."); ///  VERIFICAR
+            throw new RecursoNaoEncontradoExcecao("O conteúdo não está presente na lista do usuário."); ///  VERIFICAR
         }
 
         // 6. Remover associação

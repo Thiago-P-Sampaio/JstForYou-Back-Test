@@ -88,8 +88,9 @@ public class ConteudoService {
                 .ifPresent(conteudo::setMediaId);
 
         Optional.ofNullable(dto.mediaTipo())
-                .filter(s -> !s.isBlank() || !s.equals(conteudo.getMedia()))
+                .filter(s -> !s.isBlank())
                 .map(TipoMedia::fromValue)
+                .filter(novoTipo -> !novoTipo.equals(conteudo.getMedia()))
                 .ifPresent(conteudo::setMedia);
 
         EntidadeConteudos entidadeSalva = conteudosRepositorio.save(conteudo);
