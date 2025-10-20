@@ -56,7 +56,8 @@ spring.jpa.open-in-view=false
 
 Responsável por lidar com as requisições que permitirão:
 - Cadastrar-se;
-- Logar-se. <br>
+- Logar-se;
+- Redefinir senha.<br>
 ``Controlando o acesso ao sistema!``
 
 ### `POST` Registrar-se: http://localhost:8080/auth/register
@@ -141,6 +142,79 @@ Erro típico:
 }
 ```
 
+
+### `POST` Solicitação para redefinir senha: http://localhost:8080/auth/forgot-password
+Recebe como parâmetros um corpo JSON:
+```JSON
+{
+  "email": ""
+}
+
+```
+
+Resposta comum:
+
+```JSON
+
+Se um e-mail cadastrado for encontrado, um link de redefinição será enviado.
+```
+
+Encontra-se na caixa de e-mail do usuário, o link para página de redefinição
+de senha com o respectivo `token` para a operação:
+
+- [x] Resposta comum: 200 OK;
+- [ ] Resposta de erros: 400 BAD_REQUEST;
+
+Erros típicos:
+```JSON
+{
+    "timestamp": "2025-10-20T13:13:49.264344800Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "email": "deve ser um endereço de e-mail bem formado"
+    },
+    "path": "/auth/forgot-password"
+}
+
+```
+```JSON
+{
+    "timestamp": "2025-10-20T13:14:36.976837200Z",
+    "status": 400,
+    "error": "Requisição inconsistente!",
+    "message": "O corpo da requisição é invalido ou mal formado. Verifique os tipos de dados dos campos!",
+    "path": "/auth/forgot-password"
+
+
+```
+
+### `POST` Redefinir senha: http://localhost:8080/auth/eset-password
+Recebe como parâmetros um corpo JSON:
+```JSON
+{
+  "senha": "",
+  "confirmarSenha": "",
+  "token": ""
+}
+
+```
+
+Resposta comum
+```JSON
+Senha alterada com sucesso.
+```
+
+- [x] Resposta comum: 201 CREATED;
+- [ ] Resposta de erros: 400 BAD_REQUEST;
+
+
+```JSON
+Token inválido ou expirado!
+```
+```JSON
+As senhas não coincidem!
+```
 ---
 
 # Controller: `AvatarController`:
@@ -575,7 +649,7 @@ Erros típicos
     "path": "/api/jfy/listcontent/usuario/10/conteudos"
 } 
 ```
-### `POST` Adicionar:  http://localhost:8080/api/jfy/listcontent/usuario/{usuarioId}/conteudos
+### `DELETE` REMOVER:  http://localhost:8080/api/jfy/listcontent/usuario/{usuarioId}/conteudos
 Para a removação do conteúdo em lista é necessário fornecer o `id` do usuário junto com
 um corpo JSON:
 
@@ -623,10 +697,240 @@ um corpo JSON:
 }
 ```
 
+### `GET` Buscar conteúdos da lista:  http://localhost:8080/api/jfy/listcontent/usuario/{usuarioId}
+Recebe como parâmetro o `id` do usuário no  `PATH`:
+
+Resposta comum:
+```JSON
+
+{
+    "listaId": 2,
+    "conteudos": [
+        {
+            "conteudoId": 5,
+            "titulo": "Mistérios da Vila",
+            "mediaTipo": "tv",
+            "mediaId": 900404
+        },
+        {
+            "conteudoId": 4,
+            "titulo": "Horizonte Azul",
+            "mediaTipo": "movie",
+            "mediaId": 900303
+        },
+        {
+            "conteudoId": 1,
+            "titulo": "Inception",
+            "mediaTipo": "movie",
+            "mediaId": 106
+        },
+        {
+            "conteudoId": 2,
+            "titulo": "Nebula Rising",
+            "mediaTipo": "movie",
+            "mediaId": 900101
+        },
+        {
+            "conteudoId": 3,
+            "titulo": "Rua das Lembranças",
+            "mediaTipo": "tv",
+            "mediaId": 900202
+        }
+    ]
+}
+```
+
+- [x] Resposta comum: 200 OK;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+
+
+Erros típicos:
+```JSON
+{
+  "timestamp": "2025-10-20T13:32:49.648333Z",
+  "status": 404,
+  "error": "Recurso não encontrado!",
+  "message": "Usuário não encontrado com ID: 4",
+  "path": "/api/jfy/listcontent/usuario/4"
+}
+```
 
 
 
 
+# Controller: `PreferenciaController`:
+Lida com as operações que rege as preferências de determinado usuário.
+- Criar e relacionar preferência a usuário;
+- Deletar;
+- Buscar;
+- Editar.
+
+### `POST` Adicionar preferência:  http://localhost:8080/api/jfy/preferences/usuario
+Recebe como parâmetros um corpo JSON com:
+```JSON
+{
+  "usuarioId": 1,
+  "descricao": "Violência fantasiosa"
+}
+
+```
+
+Resposta comum:
+```JSON
+{
+    "preferenciaId": 1,
+    "descricao": "Violência fantasiosa"
+}
+```
+
+- [x] Resposta comum: 201 CREATED;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 400 BAD_REQUEST;
+
+
+Erros típicos:
+```JSON
+{
+    "timestamp": "2025-10-20T13:43:46.963723100Z",
+    "status": 400,
+    "error": "Requisição inconsistente!",
+    "message": "O corpo da requisição é invalido ou mal formado. Verifique os tipos de dados dos campos!",
+    "path": "/api/jfy/preferences/usuario"
+}
+
+```
+```JSON
+{
+    "timestamp": "2025-10-20T13:44:32.040976Z",
+    "status": 404,
+    "error": "Recurso não encontrado!",
+    "message": "Usuário com ID 10 não encontrado.",
+    "path": "/api/jfy/preferences/usuario"
+}
+```
+```JSON
+ {
+    "timestamp": "2025-10-20T13:47:33.195580900Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+    "descricao": "Formato de texto inválido!"
+    },
+    "path": "/api/jfy/preferences/usuario"
+ }
+```
+
+
+
+### `DELETAR` Remover preferência:  http://localhost:8080/api/jfy/preferences/{preferenciaId}
+Recebe um `id` da preferência no `PATH`
+
+- [x] Resposta comum: 204 NO_CONTENT;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+
+```JSON
+{
+    "timestamp": "2025-10-20T13:50:43.694903200Z",
+    "status": 404,
+    "error": "Recurso não encontrado!",
+    "message": "Preferencia com id: 1 não encontrado!",
+    "path": "/api/jfy/preferences/1"
+}
+``` 
+
+
+### `GET` Buscar preferências:  http://localhost:8080/api/jfy/preferences/
+- Preferências do usuário: `/usuario/{usuarioId}`;
+- Todas: `/all` com parâmetros para paginação: `?page={}&size={}`
+
+
+Respostas comuns:
+```JSON
+[
+    {
+        "preferenciaId": 2,
+        "descricao": "Violência fantasiosa"
+    },
+    {
+        "preferenciaId": 3,
+        "descricao": "Violência fantasiosa"
+    }
+]
+```
+
+```JSON
+{
+  "content": [
+    {
+      "preferenciaId": 2,
+      "descricao": "Violência fantasiosa"
+    },
+    {
+      "preferenciaId": 3,
+      "descricao": "Violência fantasiosa"
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 20,
+    "sort": {
+      "empty": true,
+      "sorted": false,
+      "unsorted": true
+    },
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "last": true,
+  "totalElements": 2,
+  "totalPages": 1,
+  "size": 20,
+  "number": 0,
+  "sort": {
+    "empty": true,
+    "sorted": false,
+    "unsorted": true
+  },
+  "numberOfElements": 2,
+  "first": true,
+  "empty": false
+}
+```
+
+- [x] Resposta comum: 200 OK;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+
+Erros típicos:
+```JSON
+{
+    "timestamp": "2025-10-20T13:55:23.607183Z",
+    "status": 404,
+    "error": "Recurso não encontrado!",
+    "message": "Usuário com ID 10 não encontrado.",
+    "path": "/api/jfy/preferences/usuario/10"
+}
+```
+### `PUT` Editar preferência:  http://localhost:8080/api/jfy/preferences//edit/{id}/{usuarioId}
+Recebe por parâmetros o `id` da preferência e do usuário além de um corpo JSON:
+```JSON
+{
+  "descricao": ""
+}
+ ```
+
+Resposta comum:
+
+```JSON
+{
+    "preferenciaId": 2,
+    "descricao": "Desenho animado"
+}
+```
+
+- [x] Resposta comum: 200 OK;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+    
 
 
 
