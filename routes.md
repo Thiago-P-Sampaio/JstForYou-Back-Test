@@ -911,7 +911,7 @@ Erros típicos:
     "path": "/api/jfy/preferences/usuario/10"
 }
 ```
-### `PUT` Editar preferência:  http://localhost:8080/api/jfy/preferences//edit/{id}/{usuarioId}
+### `PUT` Editar preferência:  http://localhost:8080/api/jfy/preferences/edit/{id}/{usuarioId}
 Recebe por parâmetros o `id` da preferência e do usuário além de um corpo JSON:
 ```JSON
 {
@@ -930,7 +930,157 @@ Resposta comum:
 
 - [x] Resposta comum: 200 OK;
 - [ ] Resposta de erros: 404 NOT_FOUND;
-    
+- [ ] Resposta de erros: 403 FORBIDDEN;
+
+Erros típicos
+
+
+
+# Controller: `UsuarioController`:
+Lida com operações na camada de usuário, nas quais consitem em:
+- Buscar;
+- Deletar;
+- Remover.
+
+### `GET` Buscar usuário:  http://localhost:8080/api/jfy/user
+- Buscar usuário por `id`: `/{id}`;
+- Buscar usuários por paginação: `/all`  com parâmetros: `?page={}&size={}`; 
+
+Resposta comum:
+
+```JSON
+{
+    "usuarioId": 1,
+    "nome": "Admin",
+    "email": "jfy@gmail.com",
+    "preferencias": [],
+    "listaUsuario": {
+        "listaId": 1,
+        "conteudos": []
+    },
+    "avatar": null
+}
+```
+```JSON
+{
+    "content": [
+        {
+            "usuarioId": 1,
+            "nome": "Admin",
+            "email": "jfy@gmail.com",
+            "preferencias": [],
+            "listaUsuario": {
+                "listaId": 1,
+                "conteudos": []
+            },
+            "avatar": null
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 1,
+        "sort": {
+            "sorted": false,
+            "unsorted": true,
+            "empty": true
+        },
+        "offset": 0,
+        "paged": true,
+        "unpaged": false
+    },
+    "last": false,
+    "totalPages": 4,
+    "totalElements": 4,
+    "numberOfElements": 1,
+    "first": true,
+    "size": 1,
+    "number": 0,
+    "sort": {
+        "sorted": false,
+        "unsorted": true,
+        "empty": true
+    },
+    "empty": false
+}
+```
+
+- [x] Resposta comum: 200 OK;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 403 FORBIDDEN;
+
+Erros típicos:
+
+```JSON
+{
+    "timestamp": "2025-10-20T17:15:56.078164700Z",
+    "status": 404,
+    "error": "Recurso não encontrado!",
+    "message": "Usuário com ID: 6 não encontrado!",
+    "path": "/api/jfy/user/6"
+}
+```
+
+
+### `DELETE` Remover um usuário:  http://localhost:8080/api/jfy/user/{id}  `ADMIN`
+Recebe como um parâmetro o `id` do usuário!
+
+Resposta comum:
+
+
+
+
+- [x] Resposta comum: 204 NOT_CONTENT;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+
+Erros típicos:
+
+```JSON
+
+```
+
+```JSON
+
+```
+
+```JSON
+
+```
+
+### `PUT` Editar usuário usuário:  http://localhost:8080/api/jfy/user/edit/{id}
+Recebe como parâmetros o `id` do usuário no  `PATH` e um corpo JSON:
+
+
+Resposta comum
+```JSON
+{
+  "nome": "",
+  "email": "",
+  "senha": "",
+  "avatar_id": null
+}
+```
+
+Resposta comum:
+
+```JSON
+{
+    "usuarioId": 2,
+    "nome": "Thiago",
+    "email": "alice@gmail.com",
+    "preferencias": [],
+    "listaUsuario": {
+        "listaId": 2,
+        "conteudos": []
+    },
+    "avatar": null
+}
+
+```
+
+
+
+
 
 
 
