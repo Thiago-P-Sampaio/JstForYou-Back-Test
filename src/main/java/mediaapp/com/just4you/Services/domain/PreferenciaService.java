@@ -6,6 +6,7 @@ import mediaapp.com.just4you.DTOs.Put.EditarPreferencia;
 import mediaapp.com.just4you.DTOs.Response.PreferenciaDTO;
 import mediaapp.com.just4you.Entities.EntidadePreferencia;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
+import mediaapp.com.just4you.Exceptions.AcessoNegadoExcecao;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.PreferenciaRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
@@ -72,14 +73,14 @@ public class PreferenciaService {
 
     public PreferenciaDTO editarPreferencia(EditarPreferencia dto, Long id, Long usuarioId){
         EntidadePreferencia preferencia = preferenciaRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Preferência com ID: "+ id + " Não encontrado!"));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Preferência com ID: "+ id + " Não encontrado!"));
 
         if(!preferencia.getUsuario().getUsuarioId().equals(usuarioId)){
-            throw new RuntimeException("Preferência não pertence ao usuário");  ///TRATAR EXCEÇÃO!
+            throw new AcessoNegadoExcecao("Preferência não pertence ao usuário");  ///TRATAR EXCEÇÃO!
         }
 
         Optional.of(dto.descricao())
-                .filter(s -> !s.isBlank())
+                .filter(s -> !s.isBlank() && !s.equals(preferencia.getDescricao())) //VERIFICAR!
                 .ifPresent(preferencia::setDescricao);
 
         EntidadePreferencia entidadeSalva = preferenciaRepositorio.save(preferencia);

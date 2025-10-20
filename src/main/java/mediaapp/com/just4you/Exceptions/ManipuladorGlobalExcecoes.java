@@ -82,6 +82,33 @@ public class ManipuladorGlobalExcecoes {
         return ResponseEntity.status(status).body(resposta);
     }
 
+    @ExceptionHandler(AcessoNegadoExcecao.class)
+    public ResponseEntity<ErroResposta> acessoNegado(AcessoNegadoExcecao exc, HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Acesso negado",
+                exc.getMessage(),
+                requisicao.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErroResposta> erroGenerico(Exception exc,HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Erro interno do Servidor",
+                "Ocorreu um erro inesperado",
+                requisicao.getRequestURI()
+        );
+        System.out.println(exc.getMessage());
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
 
 
 }

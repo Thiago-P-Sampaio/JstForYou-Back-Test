@@ -25,7 +25,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
                 ///  PASSAR O EMAIL
-            helper.setFrom("noreply@gmail.com");
+            helper.setFrom("justforyou.tcc.senai@gmail.com");
             helper.setSubject("Alteração de Senha");
             helper.setTo(email);
                     ///  PASSAR A URL DO FRONT COM PARâMETRO  ?token=
