@@ -50,6 +50,25 @@ spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.open-in-view=false
 ```
 
+- A maioria das rotas se faz necessário a autênticação mínima de `USUARIO`. Abstém-se dessa regras
+as rotas que envolvem: `login` e `cadastro`.
+- Portanto, é necessário preencher em cada requisição o token gerado na autenticação(login)
+
+Exemplo de consumo FRONT-END:
+```js
+fetch('https://api.exemplo.com/recurso-protegido', {
+  method: 'POST',
+  
+  // 2. O CABEÇALHO com o Token
+  headers: {
+    'Content-Type': 'application/json', // Informa que o corpo é JSON
+    'Authorization': `Bearer ${seuToken}`
+  },
+
+  body: JSON.stringify(dadosParaEnviar) 
+})
+```
+
 ---
 
 # Controller: `AutenticacaoController`:
@@ -932,7 +951,29 @@ Resposta comum:
 - [ ] Resposta de erros: 404 NOT_FOUND;
 - [ ] Resposta de erros: 403 FORBIDDEN;
 
-Erros típicos
+Erros típicos:
+
+```JSON
+{
+    "timestamp": "2025-10-21T12:06:29.894153Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Preferência não pertence ao usuário",
+    "path": "/api/jfy/preferences/edit/1/3"
+}
+```
+
+```JSON
+{
+    "timestamp": "2025-10-21T12:06:29.894153Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Preferência não pertence ao usuário",
+    "path": "/api/jfy/preferences/edit/1/3"
+}
+```
+
+
 
 
 
@@ -1024,34 +1065,38 @@ Erros típicos:
 ### `DELETE` Remover um usuário:  http://localhost:8080/api/jfy/user/{id}  `ADMIN`
 Recebe como um parâmetro o `id` do usuário!
 
-Resposta comum:
-
-
-
-
 - [x] Resposta comum: 204 NOT_CONTENT;
 - [ ] Resposta de erros: 404 NOT_FOUND;
-- [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 403 FORBIDDEN;
+- [ ] Resposta de erros: 500 INTERNAL_ERROR;
 
 Erros típicos:
 
 ```JSON
-
+{
+    "timestamp": "2025-10-21T11:56:17.337645100Z",
+    "status": 404,
+    "error": "Recurso não encontrado!",
+    "message": "Usuário com ID: 1 não encontrado!",
+    "path": "/api/jfy/user/1"
+}
 ```
 
 ```JSON
+{
+    "timestamp": "2025-10-21T11:56:28.210740Z",
+    "status": 500,
+    "error": "Erro interno do Servidor",
+    "message": "Ocorreu um erro inesperado",
+    "path": "/api/jfy/user/eee"
+}
 
 ```
 
-```JSON
-
-```
 
 ### `PUT` Editar usuário usuário:  http://localhost:8080/api/jfy/user/edit/{id}
 Recebe como parâmetros o `id` do usuário no  `PATH` e um corpo JSON:
 
-
-Resposta comum
 ```JSON
 {
   "nome": "",
@@ -1078,6 +1123,39 @@ Resposta comum:
 
 ```
 
+- [x] Resposta comum: 200 OK;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 403 FORBIDDEN;
+- [ ] Resposta de erros: 500 INTERNAL_ERROR;
+- [ ] Resposta de erros: 400 BAD_REQUEST;
+
+
+Erros típicos
+```JSON
+{
+  "timestamp": "2025-10-21T12:54:55.777881900Z",
+  "status": 500,
+  "error": "Erro interno do Servidor",
+  "message": "Ocorreu um erro inesperado",
+  "path": "/auth/user/edit/10"
+}
+```
+
+```JSON
+{
+  "timestamp": "2025-10-21T13:02:28.908784700Z",
+  "status": 400,
+  "error": "Erro de validação",
+  "message": {
+    "email": "deve ser um endereço de e-mail bem formado"
+  },
+  "path": "/api/jfy/user/edit/2"
+}
+```
+
+---
+### Swagger: http://localhost:8080/swagger-ui/index.html `ADMIN`
+As rotas também estão documentadas e presentes no `swagger`.
 
 
 
