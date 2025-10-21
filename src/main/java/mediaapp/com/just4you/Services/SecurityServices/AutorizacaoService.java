@@ -1,5 +1,6 @@
 package mediaapp.com.just4you.Services.SecurityServices;
 
+import mediaapp.com.just4you.Exceptions.UsuarioNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,10 @@ public class AutorizacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       return  usuarioRepositorio.findByEmail(username);
+       UserDetails usuario = usuarioRepositorio.findByEmail(username);
+       if(usuario == null){
+           throw new UsuarioNaoEncontradoExcecao("Usuário não encontrado!");
+       }
+       return usuario;
     }
 }

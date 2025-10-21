@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class ConteudoController {
     }
 
     // Deletar conteúdo
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/dell/{id}")
     public ResponseEntity<Void> deletarConteudo(@PathVariable Long id) {
         conteudoService.deletarConteudo(id);
@@ -62,6 +64,7 @@ public class ConteudoController {
         return ResponseEntity.ok(conteudo);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<ConteudoDTO> editarConteudo(@PathVariable Long id, @RequestBody @Valid EditarConteudo dto) {
         return ResponseEntity.ok().body(conteudoService.editarConteudo(dto, id));

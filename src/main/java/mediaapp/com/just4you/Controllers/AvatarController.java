@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,17 +24,19 @@ public class AvatarController {
     @Autowired
     AvatarService avatarService;
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<AvatarDTO> adicionarAvatar(@RequestBody @Valid  AdicionarAvatarDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(avatarService.novoAvatar(dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<AvatarDTO> editarAvatar(@PathVariable Long id, @RequestBody @Valid EditarAvatar dto) {
         return ResponseEntity.ok().body(avatarService.atualizarAvatar(dto, id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/dell/{id}")
     public ResponseEntity<?> deletarAvatar(@PathVariable Long id) {
         avatarService.deletarAvatar(id);

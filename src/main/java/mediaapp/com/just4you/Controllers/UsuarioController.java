@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +24,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorId(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<Page<UsuarioDTO>> buscarTodosPorPagina(Pageable pagina){
         Page<UsuarioDTO> paginaDeUsuarios = usuarioService.buscarTodosPorPagina(pagina);
@@ -30,6 +32,7 @@ public class UsuarioController {
     }
 
     // Deletar usuário por ID
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
