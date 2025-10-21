@@ -6,11 +6,15 @@ import mediaapp.com.just4you.DTOs.Exception.ValidacaoErroRespota;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -106,6 +110,36 @@ public class ManipuladorGlobalExcecoes {
                 requisicao.getRequestURI()
         );
         System.out.println(exc.getMessage());
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErroResposta>  acessoNaoAltorizado(AuthorizationDeniedException exc, HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Acesso Negado!",
+                "Você não tem permissão para acessar este recurso!",
+                requisicao.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErroResposta>  usuarioNaoEncontrado(BadCredentialsException exc, HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Credenciais inválidas",
+                "Usuário ou senha incorretos.",
+                requisicao.getRequestURI()
+        );
+
         return ResponseEntity.status(status).body(erroResposta);
     }
 
