@@ -10,9 +10,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.nio.file.AccessDeniedException;
 import java.time.Instant;
@@ -142,6 +144,46 @@ public class ManipuladorGlobalExcecoes {
 
         return ResponseEntity.status(status).body(erroResposta);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErroResposta> argumentoIlegal(IllegalArgumentException exc, HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Requisição Inválida",
+                exc.getMessage(),
+                requisicao.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErroResposta> metodoNaoSuportado(HttpRequestMethodNotSupportedException exc, HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Método não suportado!",
+                "O método: " + exc.getMethod() + " não é suportado!",
+                requisicao.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErroResposta> parametroIncorretoUrl(MethodArgumentTypeMismatchException exc, HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Parâmetro inválido",
+                exc.getMessage(),
+                requisicao.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
 
 
 
