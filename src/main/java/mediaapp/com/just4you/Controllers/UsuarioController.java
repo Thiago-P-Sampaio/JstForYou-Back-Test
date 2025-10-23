@@ -40,6 +40,7 @@ public class UsuarioController {
 
     }
 
+//    @PreAuthorize("#id == authentication.principal.id")
     @PutMapping("/edit/{id}")
     public ResponseEntity<UsuarioDTO> alterarDadosUsuario(
             @PathVariable Long id,
