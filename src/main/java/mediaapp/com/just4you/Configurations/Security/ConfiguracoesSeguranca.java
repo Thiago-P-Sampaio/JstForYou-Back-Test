@@ -39,7 +39,7 @@ public class ConfiguracoesSeguranca implements WebMvcConfigurer {
                                  .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                                  .requestMatchers(HttpMethod.POST, "/auth/forgot-password").permitAll()
                                  .requestMatchers(HttpMethod.POST, "/auth/reset-password").permitAll()
-                                 .anyRequest().permitAll()
+                                 .anyRequest().authenticated()
                  )
 
                  .addFilterBefore(filtroSeguranca, UsernamePasswordAuthenticationFilter.class )
