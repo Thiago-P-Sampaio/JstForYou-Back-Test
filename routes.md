@@ -68,6 +68,17 @@ fetch('https://api.exemplo.com/recurso-protegido', {
   body: JSON.stringify(dadosParaEnviar) 
 })
 ```
+---
+# Sumário:
+- [Autenticação Controller](#controller-autenticacaocontroller)
+- [AvatarController](#controller-avatarcontroller)
+- [ConteudoController](#controller-conteudocontroller)
+- [ListaConteudoController](#controller-listaconteudocontroller)
+- [PreferenciaController](#controller-preferenciacontroller)
+- [UsuarioController](#controller-usuariocontroller)
+- [Swagger](#swagger-)
+
+---
 
 ---
 
@@ -78,7 +89,7 @@ Responsável por lidar com as requisições que permitirão:
 - Logar-se;
 - Redefinir senha.<br>
 ``Controlando o acesso ao sistema!``
-
+---
 ### `POST` Registrar-se: http://localhost:8080/auth/register
 recebe um JSON com os parâmetros:
 
@@ -95,7 +106,7 @@ recebe um JSON com os parâmetros:
 - [ ] Resposta incomum: 409 CONFLICT;
 - [ ] Resposta de erros: 400 BAD_REQUEST;
 
-Erro típico:
+Erros típicos:
 ```JSON
 {
     "timestamp": "2025-10-17T20:22:23.821278Z",
@@ -112,7 +123,6 @@ Erro típico:
 
 ```
 
-Erro típico: 
 
 ```JSON
 {
@@ -120,6 +130,16 @@ Erro típico:
     "status": 400,
     "error": "Requisição inconsistente!",
     "message": "O corpo da requisição é invalido ou mal formado. Verifique os tipos de dados dos campos!",
+    "path": "/auth/register"
+}
+```
+
+```JSON
+{
+    "timestamp": "2025-10-22T22:38:42.419336600Z",
+    "status": 409,
+    "error": "Conteúdo existente",
+    "message": "Não foi possível criar o usuário",
     "path": "/auth/register"
 }
 ```
@@ -148,9 +168,9 @@ Recebe uma resposta JSON:
 
 - [x] Resposta comum: 200 OK;
 - [ ] Resposta de erros: 400 BAD_REQUEST;
-- [ ] Resposta de erros: 403 FORBIDDEN;
+- [ ] Resposta de erros: 401 UNAUTHORIZED;
 
-Erro típico:
+Erros típicos:
 ```JSON
 {
     "timestamp": "2025-10-17T20:26:39.458972100Z",
@@ -160,8 +180,17 @@ Erro típico:
     "path": "/auth/login"
 }
 ```
+```JSON
+{
+    "timestamp": "2025-10-22T23:08:57.443063400Z",
+    "status": 401,
+    "error": "Credenciais inválidas",
+    "message": "Usuário ou senha incorretos.",
+    "path": "/auth/login"
+}
+```
 
-
+---
 ### `POST` Solicitação para redefinir senha: http://localhost:8080/auth/forgot-password
 Recebe como parâmetros um corpo JSON:
 ```JSON
@@ -207,8 +236,8 @@ Erros típicos:
 
 
 ```
-
-### `POST` Redefinir senha: http://localhost:8080/auth/eset-password
+---
+### `POST` Redefinir senha: http://localhost:8080/auth/reset-password
 Recebe como parâmetros um corpo JSON:
 ```JSON
 {
@@ -234,8 +263,32 @@ Token inválido ou expirado!
 ```JSON
 As senhas não coincidem!
 ```
----
 
+```JSON
+{
+    "timestamp": "2025-10-22T23:05:44.219196100Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "confirmarSenha": "must not be blank"
+    },
+    "path": "/auth/reset-password"
+}
+```
+
+```JSON
+{
+    "timestamp": "2025-10-22T23:06:15.566312700Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "senha": "A senha deve ter no mínimo 6 caracteres!",
+        "confirmarSenha": "A senha deve ter no mínimo 6 caracteres!"
+    },
+    "path": "/auth/reset-password"
+}
+```
+---
 # Controller: `AvatarController`:
 Responsável por definir os avatares a serem associados a algum perfil, que permitirão
 
@@ -245,8 +298,8 @@ Responsável por definir os avatares a serem associados a algum perfil, que perm
 - Buscar por ID;
 - Buscar tudo;
 - Buscar por páginas:
-
-### `POST` Adicionar: http://localhost:8080/api/jfy/avatar `(ADMIN)`
+---
+### `POST` Adicionar: http://localhost:8080/api/jfy/avatar/add `(ADMIN)`
 Recebe como parâmetros para um JSON:
 ```JSON
 {
@@ -269,7 +322,7 @@ Resposta comum:
 - [ ] Resposta de erros: 403 FORBIDDEN;
 - [ ] Resposta de erros: 409 CONFLICT;
 
-Erro típico:
+Erros típicos:
 ```JSON
 {
     "timestamp": "2025-10-17T20:33:22.819055100Z",
@@ -280,7 +333,6 @@ Erro típico:
 }
 ```
 
-Erro típico:
 ```JSON
 {
     "timestamp": "2025-10-17T20:34:22.057934Z",
@@ -293,7 +345,17 @@ Erro típico:
     "path": "/api/jfy/avatar/add"
 }
 ```
+```JSON
+{
+    "timestamp": "2025-10-22T23:12:46.521070800Z",
+    "status": 403,
+    "error": "Acesso Negado!",
+    "message": "Você não tem permissão para acessar este recurso!",
+    "path": "/api/jfy/avatar/add"
+}
+```
 
+---
 ### `PUT` Editar: http://localhost:8080/api/jfy/avatar/edit/{id} `ADMIN`
 Recebe como parâmetros um ID do tipo `LONG`, e um corpo JSON:
 ```JSON
@@ -315,12 +377,35 @@ Resposta comum:
 - [ ] Resposta de erros: 400 BAD_REQUEST;
 - [ ] Resposta de erros: 403 FORBIDDEN;
 
+```JSON
+{
+    "timestamp": "2025-10-22T23:21:04.130042300Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "url": "must be a valid URL",
+        "descricao": "Formato de texto inválido!"
+    },
+    "path": "/api/jfy/avatar/edit/3"
+}
+```
+```JSON
+{
+    "timestamp": "2025-10-22T23:19:18.166985700Z",
+    "status": 403,
+    "error": "Acesso Negado!",
+    "message": "Você não tem permissão para acessar este recurso!",
+    "path": "/api/jfy/avatar/edit/3"
+}
+```
+
+---
 ### `DELETE` Remover:  http://localhost:8080/api/jfy/avatar/dell/{id}  `ADMIN`
 Recebe somente o ID na no `PATH`
 
 - [x] Resposta comum: 204 OK NOT_CONTENT;
 - [ ] Resposta de erros: 404 NOT_FOUND;
-- [ ] Resposta de erros: 400 BAD_REQUEST;
+- [ ] Resposta de erros: 500 INTERNAL_ERROR;
 - [ ] Resposta de erros: 403 FORBIDDEN;
 
 
@@ -334,7 +419,26 @@ Erro típico:
   "path": "/api/jfy/avatar/dell/1"
 }
 ```
+```JSON
+{
+    "timestamp": "2025-10-22T23:22:04.520753Z",
+    "status": 403,
+    "error": "Acesso Negado!",
+    "message": "Você não tem permissão para acessar este recurso!",
+    "path": "/api/jfy/avatar/dell/2"
+}
+```
 
+```JSON
+{
+    "timestamp": "2025-10-22T23:22:30.751708100Z",
+    "status": 500,
+    "error": "Erro interno do Servidor",
+    "message": "Ocorreu um erro inesperado",
+    "path": "/api/jfy/avatar/dell/2e"
+}
+```
+---
 ### `GET` Buscar:  http://localhost:8080/api/jfy/avatar/get 
  - Todos: `/all`;
  - Id: `/{id}`;
@@ -424,14 +528,16 @@ ações permitem:
 - Deletar;
 - Buscar;
 - Editar.
-
-### `POST` Adicionar:  http://localhost:8080/api/jfy/content/
+---
+### `POST` Adicionar:  http://localhost:8080/api/jfy/content
 Recebe como parâmetros um corpo JSON:
+```JSON
 {
 "titulo": "O Gambito da Rainha",
 "tipoMedia": "tv",
 "mediaId": 1221212122
 }
+```
 
 Sendo `tipoMedia` um `ENUM` que possui dois valores: `tv` e `movie`;
 
@@ -449,6 +555,7 @@ Resposta comum:
 - [x] Resposta comum: 201 CREATED;
 - [ ] Resposta de erros: 409 CONFLICT;
 - [ ] Resposta de erros: 400 BAD_REQUEST;
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
 Erros típicos:
 ```JSON
@@ -481,11 +588,21 @@ Erros típicos:
   "path": "/api/jfy/content"
 }
 ```
+```JSON
+{
+    "timestamp": "2025-10-22T23:43:22.755840400Z",
+    "status": 400,
+    "error": "Requisição Inválida",
+    "message": "Tipo de mídia inválido: filme",
+    "path": "/api/jfy/content"
+}
+```
 
+---
 ### `GET` Buscar:  http://localhost:8080/api/jfy/content/...
 - Todos: `/all`;
 - Todos(paginação): `/all?page={pagina}&size={quantidade}`;
-- Por id(próprio): `/{id}`
+- Por id(próprio): `/get/{id}`
 - Por parâmetros de url: `/media?mediaId={idServico}&tipoMedia={tv ou movie}`
 
 Respostas comuns:
@@ -544,6 +661,8 @@ Respostas comuns:
 
 - [x] Resposta comum: 200 OK;
 - [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 400 BAD_REQUEST;
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
 Erros típicos:
 
@@ -567,12 +686,24 @@ Erros típicos:
 }
 ```
 
+```JSON
+{
+    "timestamp": "2025-10-22T23:51:24.045106900Z",
+    "status": 400,
+    "error": "Requisição Inválida",
+    "message": "Tipo de mídia inválido: SERIE",
+    "path": "/api/jfy/content/media"
+}
+```
+---
 ### `PUT` Editar:  http://localhost:8080/api/jfy/content/edit/{id} `ADMIN`
 Recebe um corpo JSON e uma parâmetro via `PATH` para o `id`(próprio) correspondente:
 ```JSON
+{
   "titulo": "",
   "mediaTipo": "",
-  "mediaId": 
+  "mediaId":
+} 
 ```
 Sendo `mediaTipo`: `tv` ou `movie`.
 
@@ -613,12 +744,34 @@ Resposta comum:
     "path": "/api/jfy/content/edit/1"
 }
 ```
+---
 ### `DELETE` Deletar:  http://localhost:8080/api/jfy/content/dell/{id} `ADMIN`
 Recebe por parâmetros na url o ID(próprio) do conteúdo que deseja ser deletado.
 
 - [x] Resposta comum: 204 NOT_CONTENT;
 - [ ] Resposta de erros: 404 NOT_FOUND;
 - [ ] Resposta de erros: 403 FORBBIDEN;
+
+Erros típicos: 
+```JSON
+{
+    "timestamp": "2025-10-23T00:34:11.100644100Z",
+    "status": 404,
+    "error": "Recurso não encontrado!",
+    "message": "Conteúdo com ID: 2 não encontrado!",
+    "path": "/api/jfy/content/dell/2"
+}
+```
+
+```JSON
+{
+    "timestamp": "2025-10-23T00:35:33.390326500Z",
+    "status": 403,
+    "error": "Acesso Negado!",
+    "message": "Você não tem permissão para acessar este recurso!",
+    "path": "/api/jfy/content/dell/2"
+}
+```
 
 ---
 # Controller: `ListaConteudoController`:
@@ -1154,7 +1307,8 @@ Erros típicos
 ```
 
 ---
-### Swagger: http://localhost:8080/swagger-ui/index.html `ADMIN`
+# Swagger: 
+### http://localhost:8080/swagger-ui/index.html `ADMIN`
 As rotas também estão documentadas e presentes no `swagger`.
 
 
