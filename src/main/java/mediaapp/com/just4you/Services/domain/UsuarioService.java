@@ -5,6 +5,7 @@ import mediaapp.com.just4you.DTOs.Put.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
+import mediaapp.com.just4you.Exceptions.AcessoNegadoExcecao;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
@@ -12,6 +13,9 @@ import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,11 +59,21 @@ public class UsuarioService {
         return entidadeUsuarios.map(UsuarioDTO::new);
     }
 
+
     @Transactional
     public UsuarioDTO alterarDadosUsuario(EditarUsuario dados, Long id) {
 
-        EntidadeUsuario editarUsuario = usuarioRepositorio.findById(id)
-                        .orElseThrow(() ->  new RecursoNaoEncontradoExcecao("Usuário com ID: " + id + " não encontrado!"));
+        Authentication autenticacao = SecurityContextHolder.getContext().getAuthentication();
+        String emailAutenticado = autenticacao.getName();
+
+        EntidadeUsuario usuarioAutenticado = usuarioRepositorio.findEntidadeUsuarioByEmail(emailAutenticado)
+                        .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Usuário autenticado não encontrado"));
+
+        if(!usuarioAutenticado.getUsuarioId().equals(id)){
+            throw  new AcessoNegadoExcecao("Acesso negado! Você não tem permissão para realizar essa operação");
+        }
+
+        EntidadeUsuario editarUsuario = usuarioAutenticado;
 
         // Atualiza nome se for diferente
         Optional.ofNullable(dados.nome())
