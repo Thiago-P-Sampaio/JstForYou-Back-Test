@@ -10,6 +10,7 @@ import mediaapp.com.just4you.Exceptions.AcessoNegadoExcecao;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
 import mediaapp.com.just4you.Repositories.PreferenciaRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
+import mediaapp.com.just4you.Services.SecurityServices.UsuarioAutenticadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,10 +31,13 @@ public class PreferenciaService {
     @Autowired
     PreferenciaRepositorio preferenciaRepositorio;
 
+    @Autowired
+    UsuarioAutenticadoService usuarioAutenticadoService;
+
     @Transactional
     public PreferenciaDTO  criarPreferencia(CriarPreferenciaDTO dto){
-        EntidadeUsuario entidadeExistente = usuarioRepositorio.findById(dto.usuarioId())
-                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Usuário com ID " + dto.usuarioId() + " não encontrado.")); //EXCEÇÃO!!
+
+        EntidadeUsuario entidadeExistente = usuarioAutenticadoService.checarPermissaoEObterUsuario(dto.usuarioId());
 
         EntidadePreferencia novaPreferencia = new EntidadePreferencia();
         Optional.ofNullable(dto.descricao())
@@ -50,16 +54,17 @@ public class PreferenciaService {
     public void deletarPreferencia(Long id){
         EntidadePreferencia preferenciaExistente = preferenciaRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Preferencia com id: " + id + " não encontrado!"));
+        Long idUsuario = preferenciaExistente.getUsuario().getUsuarioId();
+        usuarioAutenticadoService.checarPermissao(idUsuario);
 
         preferenciaRepositorio.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     public List<PreferenciaDTO> buscarPreferenciasPorUsuario(Long id){
-        if (!usuarioRepositorio.existsById(id)) {
-            throw new RecursoNaoEncontradoExcecao("Usuário com ID " + id + " não encontrado.");
-        }
-        List<EntidadePreferencia> preferenciasDoUsuario = preferenciaRepositorio.findByUsuario_UsuarioId(id);
+
+        EntidadeUsuario usuario = usuarioAutenticadoService.checarPermissaoEObterUsuario(id);
+        List<EntidadePreferencia> preferenciasDoUsuario = usuario.getPreferencias();
         return preferenciasDoUsuario.stream()
                 .map(PreferenciaDTO::new)
                 .collect(Collectors.toList());
@@ -75,9 +80,7 @@ public class PreferenciaService {
         EntidadePreferencia preferencia = preferenciaRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Preferência com ID: "+ id + " Não encontrado!"));
 
-        if(!preferencia.getUsuario().getUsuarioId().equals(usuarioId)){
-            throw new AcessoNegadoExcecao("Preferência não pertence ao usuário");  ///TRATAR EXCEÇÃO!
-        }
+        usuarioAutenticadoService.checarPermissao(usuarioId);
 
         Optional.of(dto.descricao())
                 .filter(s -> !s.isBlank() && !s.equals(preferencia.getDescricao())) //VERIFICAR!

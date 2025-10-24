@@ -11,6 +11,7 @@ import mediaapp.com.just4you.Repositories.ConteudosListaRepositorio;
 import mediaapp.com.just4you.Repositories.ConteudosRepositorio;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
+import mediaapp.com.just4you.Services.SecurityServices.UsuarioAutenticadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +33,13 @@ public class ListaConteudoService {
     @Autowired
     ListaUsuarioRepositorio listaUsuarioRepositorio;
 
+    @Autowired
+    UsuarioAutenticadoService usuarioAutenticadoService;
+
     @Transactional
     public void adicionarConteudoLista(ConteudoParaListaDTO dto, Long usuarioId) {
 
-        // 1. Validar se o usuário existe. Se não, lançar uma exceção.
-        EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Usuário não encontrado com o ID: " + usuarioId)); /// EXCEÇÃO
+        EntidadeUsuario usuario = usuarioAutenticadoService.checarPermissaoEObterUsuario(usuarioId);
 
         // 2. Buscar a lista do usuário.
         EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
@@ -75,7 +77,7 @@ public class ListaConteudoService {
             novaAssociacao.setAvaliacao(dto.avaliacao());
             conteudosListaRepositorio.save(novaAssociacao);
         } else {
-            new RecursoExistenteExcecao(" Já existe o conteúdo com ID: " + dto.mediaId() + " na lista com ID: " + listaUsuario.getListaId());
+            throw new RecursoExistenteExcecao(" Já existe o conteúdo com ID: " + dto.mediaId() + " na lista com ID: " + listaUsuario.getListaId());
         }
 
     }
@@ -83,9 +85,7 @@ public class ListaConteudoService {
     @Transactional
     public void removerConteudoLista(ConteudoParaListaDTO dto, Long usuarioId) {
 
-        // 1. Validar se o usuário existe
-        EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Usuário não encontrado com o ID: " + usuarioId));
+        EntidadeUsuario usuario = usuarioAutenticadoService.checarPermissaoEObterUsuario(usuarioId);
 
         // 2. Buscar a lista do usuário
         EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
@@ -113,9 +113,8 @@ public class ListaConteudoService {
 
     @Transactional(readOnly = true)
     public ListaUsuarioDTO buscarListaPorUsuario(Long usuarioId) {
-        // 1. Validar se o usuário existe
-        EntidadeUsuario usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Usuário não encontrado com ID: " + usuarioId));
+
+        EntidadeUsuario usuario = usuarioAutenticadoService.checarPermissaoEObterUsuario(usuarioId);
 
         // 2. Buscar a lista do usuário
         EntidadeListaUsuario listaUsuario = listaUsuarioRepositorio.findByUsuario_UsuarioId(usuario.getUsuarioId())
