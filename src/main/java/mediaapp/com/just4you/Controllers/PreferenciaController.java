@@ -52,7 +52,7 @@ public class PreferenciaController {
     public ResponseEntity<PreferenciaDTO> atualizarPreferencia(
             @PathVariable Long id,
             @PathVariable Long usuarioId,
-            @RequestBody EditarPreferencia dto
+            @RequestBody @Valid  EditarPreferencia dto
     ){
         return ResponseEntity.ok(preferenciaService.editarPreferencia(dto, id, usuarioId));
     }
