@@ -783,6 +783,8 @@ adicionar e remover itens da lista.
 - Buscar.
 
 
+
+---
 ### `POST` Adicionar:  http://localhost:8080/api/jfy/listcontent/usuario/{usuarioId}/conteudos
 Recebe por parâmetro o `id` do usuário e um corpo JSON:
 ```JSON
@@ -793,11 +795,13 @@ Recebe por parâmetro o `id` do usuário e um corpo JSON:
   "avaliacao": true
 }
 ```
-Sendo `mediaId` o id do serviço(API Externa).
+Sendo `mediaId` o id do serviço(API Externa) e `tipoMedia`: `tv` ou `movie`
 
 - [x] Resposta comum: 201 CREATED;
 - [ ] Resposta de erros: 404 NOT_FOUND;
 - [ ] Resposta de erros: 400 BAD_REQUEST;
+- [ ] Resposta de erros: 409 CONFLICT;
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
  INVESTIGAR O MOTIVO PELO QUAL A EXCEÇÃO: `RecursoExistenteExcecao` não está sendo disparada!
 
@@ -821,6 +825,18 @@ Erros típicos
     "path": "/api/jfy/listcontent/usuario/10/conteudos"
 } 
 ```
+
+```JSON
+{
+    "timestamp": "2025-10-23T20:45:30.062940800Z",
+    "status": 409,
+    "error": "Conteúdo existente",
+    "message": " Já existe o conteúdo com ID: 11111 na lista com ID: 1",
+    "path": "/api/jfy/listcontent/usuario/1/conteudos"
+}
+```
+
+---
 ### `DELETE` REMOVER:  http://localhost:8080/api/jfy/listcontent/usuario/{usuarioId}/conteudos
 Para a removação do conteúdo em lista é necessário fornecer o `id` do usuário junto com
 um corpo JSON:
@@ -830,14 +846,13 @@ um corpo JSON:
   "titulo": "Inception",
   "tipoMedia": "movie",
   "mediaId": ,
-  "avaliacao": true
 }
 ```
 
 - [x] Resposta comum: 204 NO_CONTENT;
 - [ ] Resposta de erros: 404 NOT_FOUND;
 - [ ] Resposta de erros: 400 BAD_REQUEST;
-- [ ] Resposta de erros: 500 INTERNAL_ERROR(investigar);
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
 ```JSON
 {
@@ -869,6 +884,18 @@ um corpo JSON:
 }
 ```
 
+```JSON
+{
+    "timestamp": "2025-10-23T20:52:55.126112100Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Acesso negado! Você não tem permissão para realizar essa operação",
+    "path": "/api/jfy/listcontent/usuario/7/conteudos"
+}
+```
+
+
+---
 ### `GET` Buscar conteúdos da lista:  http://localhost:8080/api/jfy/listcontent/usuario/{usuarioId}
 Recebe como parâmetro o `id` do usuário no  `PATH`:
 
@@ -914,6 +941,7 @@ Resposta comum:
 
 - [x] Resposta comum: 200 OK;
 - [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
 
 Erros típicos:
@@ -927,9 +955,20 @@ Erros típicos:
 }
 ```
 
+```JSON
+{
+    "timestamp": "2025-10-23T22:39:10.027113900Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Acesso negado! Você não tem permissão para realizar essa operação",
+    "path": "/api/jfy/listcontent/usuario/12"
+}
+```
 
 
 
+
+---
 # Controller: `PreferenciaController`:
 Lida com as operações que rege as preferências de determinado usuário.
 - Criar e relacionar preferência a usuário;
@@ -937,6 +976,8 @@ Lida com as operações que rege as preferências de determinado usuário.
 - Buscar;
 - Editar.
 
+
+---
 ### `POST` Adicionar preferência:  http://localhost:8080/api/jfy/preferences/usuario
 Recebe como parâmetros um corpo JSON com:
 ```JSON
@@ -958,6 +999,7 @@ Resposta comum:
 - [x] Resposta comum: 201 CREATED;
 - [ ] Resposta de erros: 404 NOT_FOUND;
 - [ ] Resposta de erros: 400 BAD_REQUEST;
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
 
 Erros típicos:
@@ -992,14 +1034,26 @@ Erros típicos:
  }
 ```
 
+```JSON
+{
+    "timestamp": "2025-10-23T22:55:35.946513400Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Acesso negado! Você não tem permissão para realizar essa operação",
+    "path": "/api/jfy/preferences/usuario"
+}
+```
 
 
+---
 ### `DELETAR` Remover preferência:  http://localhost:8080/api/jfy/preferences/{preferenciaId}
 Recebe um `id` da preferência no `PATH`
 
 - [x] Resposta comum: 204 NO_CONTENT;
 - [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
+Erros típicos:
 ```JSON
 {
     "timestamp": "2025-10-20T13:50:43.694903200Z",
@@ -1009,6 +1063,17 @@ Recebe um `id` da preferência no `PATH`
     "path": "/api/jfy/preferences/1"
 }
 ``` 
+```JSON
+{
+    "timestamp": "2025-10-23T22:55:35.946513400Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Acesso negado! Você não tem permissão para realizar essa operação",
+    "path": "/api/jfy/preferences/1"
+}
+```
+
+
 
 
 ### `GET` Buscar preferências:  http://localhost:8080/api/jfy/preferences/
@@ -1072,6 +1137,7 @@ Respostas comuns:
 
 - [x] Resposta comum: 200 OK;
 - [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 403 FORBIDDEN;
 
 Erros típicos:
 ```JSON
@@ -1083,6 +1149,17 @@ Erros típicos:
     "path": "/api/jfy/preferences/usuario/10"
 }
 ```
+```JSON
+{
+    "timestamp": "2025-10-24T00:16:17.107318Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Acesso negado! Você não tem permissão para realizar essa operação",
+    "path": "/api/jfy/preferences/usuario/1"
+}
+```
+
+---
 ### `PUT` Editar preferência:  http://localhost:8080/api/jfy/preferences/edit/{id}/{usuarioId}
 Recebe por parâmetros o `id` da preferência e do usuário além de um corpo JSON:
 ```JSON
@@ -1118,18 +1195,20 @@ Erros típicos:
 
 ```JSON
 {
-    "timestamp": "2025-10-21T12:06:29.894153Z",
-    "status": 403,
-    "error": "Acesso negado",
-    "message": "Preferência não pertence ao usuário",
-    "path": "/api/jfy/preferences/edit/1/3"
+    "timestamp": "2025-10-24T00:34:33.808564400Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "descricao": "must not be blank"
+    },
+    "path": "/api/jfy/preferences/edit/6/2"
 }
 ```
 
 
 
 
-
+---
 # Controller: `UsuarioController`:
 Lida com operações na camada de usuário, nas quais consitem em:
 - Buscar;
@@ -1211,6 +1290,16 @@ Erros típicos:
     "error": "Recurso não encontrado!",
     "message": "Usuário com ID: 6 não encontrado!",
     "path": "/api/jfy/user/6"
+}
+```
+
+```JSON
+{
+    "timestamp": "2025-10-24T00:37:04.210047700Z",
+    "status": 403,
+    "error": "Acesso negado",
+    "message": "Acesso negado! Você não tem permissão para realizar essa operação",
+    "path": "/api/jfy/user/1"
 }
 ```
 
