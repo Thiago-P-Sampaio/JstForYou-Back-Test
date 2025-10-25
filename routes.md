@@ -355,6 +355,18 @@ Erros típicos:
 }
 ```
 
+```JSON
+{
+    "timestamp": "2025-10-25T22:51:09.169131Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "url": "A URL informada não pertence ao domínio aceito ou não está situada no protocolo HTTPS"
+    },
+    "path": "/api/jfy/avatar/add"
+}
+```
+
 ---
 ### `PUT` Editar: http://localhost:8080/api/jfy/avatar/edit/{id} `ADMIN`
 Recebe como parâmetros um ID do tipo `LONG`, e um corpo JSON:
@@ -399,9 +411,21 @@ Resposta comum:
 }
 ```
 
+```JSON
+{
+    "timestamp": "2025-10-25T22:51:09.169131Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "url": "A URL informada não pertence ao domínio aceito ou não está situada no protocolo HTTPS"
+    },
+    "path": "/api/jfy/avatar/edit/4"
+}
+```
+
 ---
 ### `DELETE` Remover:  http://localhost:8080/api/jfy/avatar/dell/{id}  `ADMIN`
-Recebe somente o ID na no `PATH`
+Recebe somente o ID  no `PATH`
 
 - [x] Resposta comum: 204 OK NOT_CONTENT;
 - [ ] Resposta de erros: 404 NOT_FOUND;
@@ -431,11 +455,11 @@ Erro típico:
 
 ```JSON
 {
-    "timestamp": "2025-10-22T23:22:30.751708100Z",
-    "status": 500,
-    "error": "Erro interno do Servidor",
-    "message": "Ocorreu um erro inesperado",
-    "path": "/api/jfy/avatar/dell/2e"
+  "timestamp": "2025-10-25T22:54:23.045747100Z",
+  "status": 400,
+  "error": "Parâmetro inválido",
+  "message": "Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"3e\"",
+  "path": "/api/jfy/avatar/dell/3e"
 }
 ```
 ---
@@ -1215,6 +1239,8 @@ Lida com operações na camada de usuário, nas quais consitem em:
 - Deletar;
 - Remover.
 
+
+---
 ### `GET` Buscar usuário:  http://localhost:8080/api/jfy/user
 - Buscar usuário por `id`: `/{id}`;
 - Buscar usuários por paginação: `/all`  com parâmetros: `?page={}&size={}`; 
@@ -1304,6 +1330,7 @@ Erros típicos:
 ```
 
 
+---
 ### `DELETE` Remover um usuário:  http://localhost:8080/api/jfy/user/{id}  `ADMIN`
 Recebe como um parâmetro o `id` do usuário!
 
@@ -1335,7 +1362,18 @@ Erros típicos:
 
 ```
 
+```JSON
+{
+    "timestamp": "2025-10-25T21:50:32.056061900Z",
+    "status": 403,
+    "error": "Acesso Negado!",
+    "message": "Você não tem permissão para acessar este recurso!",
+    "path": "/api/jfy/user/3"
+}
+```
 
+
+---
 ### `PUT` Editar usuário usuário:  http://localhost:8080/api/jfy/user/edit/{id}
 Recebe como parâmetros o `id` do usuário no  `PATH` e um corpo JSON:
 
