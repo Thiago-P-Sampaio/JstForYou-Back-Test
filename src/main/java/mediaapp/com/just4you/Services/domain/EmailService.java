@@ -29,7 +29,7 @@ public class EmailService {
             helper.setSubject("Alteração de Senha");
             helper.setTo(email);
                     ///  PASSAR A URL DO FRONT COM PARâMETRO  ?token=
-            String resetUrl = "http://localhost:8080/reset?token=" + token;
+            String resetUrl = "http://localhost:5173/redefinir-senha/" + token;
             String template  = carregarTemplateEmail();
 
             template = template.replace("#{nome}", nome);

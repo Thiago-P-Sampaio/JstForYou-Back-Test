@@ -111,7 +111,7 @@ public class ManipuladorGlobalExcecoes {
                 "Ocorreu um erro inesperado",
                 requisicao.getRequestURI()
         );
-        System.out.println(exc.getMessage());
+        exc.printStackTrace();
         return ResponseEntity.status(status).body(erroResposta);
     }
 
@@ -183,6 +183,8 @@ public class ManipuladorGlobalExcecoes {
         );
         return ResponseEntity.status(status).body(erroResposta);
     }
+
+
 
 
 
