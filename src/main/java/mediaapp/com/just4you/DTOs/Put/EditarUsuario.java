@@ -9,7 +9,6 @@ public record EditarUsuario(
         String nome,
         @Email
         String email,
-        String senha,
         Long avatar_id
 ) {
 

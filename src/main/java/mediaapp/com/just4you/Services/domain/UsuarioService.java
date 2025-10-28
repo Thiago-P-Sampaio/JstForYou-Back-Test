@@ -1,6 +1,7 @@
 package mediaapp.com.just4you.Services.domain;
 
 import jakarta.persistence.EntityNotFoundException;
+import mediaapp.com.just4you.DTOs.Put.AlterarSenha;
 import mediaapp.com.just4you.DTOs.Put.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
@@ -13,7 +14,9 @@ import mediaapp.com.just4you.Services.SecurityServices.UsuarioAutenticadoService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +36,9 @@ public class UsuarioService {
 
     @Autowired
     UsuarioAutenticadoService usuarioAutenticadoService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
  // GET
     @Transactional(readOnly = true)
@@ -73,12 +79,7 @@ public class UsuarioService {
                 .filter(novoEmail -> !novoEmail.isBlank() && !novoEmail.equals(editarUsuario.getEmail()))
                 .ifPresent(editarUsuario::setEmail);
 
-        Optional.ofNullable(dados.senha())
-                .filter(novaSenha -> !novaSenha.isBlank() && !new BCryptPasswordEncoder().matches(novaSenha, editarUsuario.getSenha()))
-                .ifPresent(novaSenha -> {
-                    String senhaCriptografada = new BCryptPasswordEncoder().encode(novaSenha);
-                    editarUsuario.setSenha(senhaCriptografada);
-                });
+                //REMOÇÃO DE ATUALIZAÇÃO DE SENHA -> MÉTODO DEDICADO PARA ISSO!
 
         Optional.ofNullable(dados.avatar_id()).ifPresent(avatarId -> {
             try {
@@ -94,6 +95,27 @@ public class UsuarioService {
 
         EntidadeUsuario usuarioSalvo = usuarioRepositorio.save(editarUsuario); // salva alterações
         return new UsuarioDTO(usuarioSalvo);
+    }
+
+
+    @Transactional
+    public void alterarSenha(AlterarSenha dados, Long id) {
+      EntidadeUsuario usuario =  usuarioAutenticadoService.checarPermissaoEObterUsuario(id);
+
+      if(!passwordEncoder.matches(dados.senhaAtual(), usuario.getSenha())){
+          return;
+      }
+      if(dados.novaSenha().equals(dados.confirmarSenha())){
+          return;
+      }
+      if(passwordEncoder.matches(dados.novaSenha(), usuario.getSenha())){
+          return;
+      }
+
+      String novaSenha = passwordEncoder.encode(dados.novaSenha());
+      usuario.setSenha(novaSenha);
+      usuarioRepositorio.save(usuario);
+
     }
 
 
