@@ -184,6 +184,20 @@ public class ManipuladorGlobalExcecoes {
         return ResponseEntity.status(status).body(erroResposta);
     }
 
+    @ExceptionHandler (ValidacaoExcecao.class)
+    public ResponseEntity<ErroResposta> tratarValidacao(ValidacaoExcecao exc, HttpServletRequest requisicao){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErroResposta erroResposta = new ErroResposta(
+                Instant.now(),
+                status.value(),
+                "Erro de validação",
+                exc.getMessage(),
+                requisicao.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(erroResposta);
+    }
+
 
 
 

@@ -1,6 +1,7 @@
 package mediaapp.com.just4you.Controllers;
 
 import jakarta.validation.Valid;
+import mediaapp.com.just4you.DTOs.Put.AlterarSenha;
 import mediaapp.com.just4you.DTOs.Put.EditarUsuario;
 import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Services.domain.UsuarioService;
@@ -47,6 +48,12 @@ public class UsuarioController {
             @RequestBody @Valid EditarUsuario dados) {
 
         return ResponseEntity.ok().body(usuarioService.alterarDadosUsuario(dados, id));
+    }
+
+    @PutMapping("/change-password/{id}")
+    public ResponseEntity<?> alterarSenhaUsuario( @RequestBody @Valid AlterarSenha dados, @PathVariable Long id) {
+        usuarioService.alterarSenha(dados, id);
+        return ResponseEntity.noContent().build();
     }
 
 

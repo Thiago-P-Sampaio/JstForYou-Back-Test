@@ -7,6 +7,7 @@ import mediaapp.com.just4you.DTOs.Response.UsuarioDTO;
 import mediaapp.com.just4you.Entities.EntidadeAvatar;
 import mediaapp.com.just4you.Entities.EntidadeUsuario;
 import mediaapp.com.just4you.Exceptions.RecursoNaoEncontradoExcecao;
+import mediaapp.com.just4you.Exceptions.ValidacaoExcecao;
 import mediaapp.com.just4you.Repositories.AvatarRepositorio;
 import mediaapp.com.just4you.Repositories.ListaUsuarioRepositorio;
 import mediaapp.com.just4you.Repositories.UsuarioRepositorio;
@@ -103,13 +104,13 @@ public class UsuarioService {
       EntidadeUsuario usuario =  usuarioAutenticadoService.checarPermissaoEObterUsuario(id);
 
       if(!passwordEncoder.matches(dados.senhaAtual(), usuario.getSenha())){
-          return;
+          throw new ValidacaoExcecao("Senha incorreta!");
       }
-      if(dados.novaSenha().equals(dados.confirmarSenha())){
-          return;
+      if(!dados.novaSenha().equals(dados.confirmarSenha())){
+          throw new ValidacaoExcecao("As senhas não coincidem!");
       }
       if(passwordEncoder.matches(dados.novaSenha(), usuario.getSenha())){
-          return;
+          throw new ValidacaoExcecao("A senha informada é igual a anterior!");
       }
 
       String novaSenha = passwordEncoder.encode(dados.novaSenha());

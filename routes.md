@@ -1381,7 +1381,6 @@ Recebe como parâmetros o `id` do usuário no  `PATH` e um corpo JSON:
 {
   "nome": "",
   "email": "",
-  "senha": "",
   "avatar_id": null
 }
 ```
@@ -1432,6 +1431,61 @@ Erros típicos
   "path": "/api/jfy/user/edit/2"
 }
 ```
+
+### `PUT` Alterar senha do usuário:  http://localhost:8080/api/jfy/user/change-password/{id}
+Recebe como um parâmetro no `PATH` um ID e um corpo JSON:
+
+```JSON
+{
+  "senhaAtual": "",
+  "novaSenha": "",
+  "confirmarSenha": ""
+}
+```
+
+- [x] Resposta comum: 204 NO_CONTENT;
+- [ ] Resposta de erros: 404 NOT_FOUND;
+- [ ] Resposta de erros: 403 FORBIDDEN;
+- [ ] Resposta de erros: 400 BAD_REQUEST;
+
+```JSON
+{
+    "timestamp": "2025-10-29T21:50:52.841328800Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": {
+        "novaSenha": "A senha deve conter no mínimo 6 caracteres!",
+        "confirmarSenha": "A senha deve conter no mínimo 6 caracteres!",
+        "senhaAtual": "O campo deve ser preenchido!"
+    },
+    "path": "/api/jfy/user/change-password/6"
+}
+```
+
+```JSON
+{
+    "timestamp": "2025-10-29T21:51:29.539519600Z",
+    "status": 400,
+    "error": "Erro de validação",
+    "message": "Senha incorreta!",
+    "path": "/api/jfy/user/change-password/8"
+}
+```
+
+```JSON
+
+```
+
+```JSON
+{
+    "timestamp": "2025-10-29T21:50:32.657102700Z",
+    "status": 404,
+    "error": "Recurso não encontrado!",
+    "message": "Usuário com ID: 6 não encontrado!",
+    "path": "/api/jfy/user/change-password/6"
+}
+```
+
 
 ---
 # Swagger: 
