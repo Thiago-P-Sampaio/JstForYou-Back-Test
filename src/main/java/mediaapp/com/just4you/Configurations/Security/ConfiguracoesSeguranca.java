@@ -60,19 +60,10 @@ public class ConfiguracoesSeguranca implements WebMvcConfigurer {
 
 
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("http://localhost:5173")
-                .allowedOrigins("/**")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*")
-                .allowCredentials(true);
-    }
-
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("https://justforyoutcc.netlify.app");
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedMethod("GET");
         configuration.addAllowedMethod("POST");
